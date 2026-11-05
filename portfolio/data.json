@@ -17,8 +17,96 @@
   "linkedin": "",
   "youtube": "",
   "sito": "https://olivieridomenico.it",
+  "clientiMax": 6,
+  "clientiTitolo": "Hanno collaborato con me",
+  "altriTitolo": "Altre collaborazioni",
+  "mostraAltri": true,
   "nota": "",
   "baseUrl": "https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/"
  },
- "podcast": []
+ "tagRuoli": [
+  "Montaggio",
+  "Sonorizzazione",
+  "Sound design",
+  "Registrazione",
+  "Distribuzione",
+  "Composizione musicale",
+  "Coaching",
+  "Consulenza"
+ ],
+ "clienti": [],
+ "podcast": [
+  {
+   "id": "iufrs8r",
+   "titolo": "Generazione Europa",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Il podcast di 20e30 in collaborazione con l’ufficio del parlamento europeo in Italia e la Rappresentanza della commissione europea con la media partnership di CnC Media.",
+   "cliente": "20e30",
+   "periodo": "05/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "Rossella Pivanti",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/5ktBPBfqd3OQHWXnCy5Tva?si=94f449af6daf4f49",
+   "slug": "generazione-europa",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": ""
+   }
+  },
+  {
+   "id": "g87xmgg",
+   "titolo": "È il sesso, bellezza!",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Il podcast dell’attrice e performer di burlesque Giulia di Quilio, dove affronta il tema del sesso e della sessualità abbattendo ogni tabù.",
+   "cliente": "Giulia Di Quilio",
+   "periodo": "2° Stagione - 09/23",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://www.spreaker.com/show/e-il-sesso-bellezza",
+   "slug": "e-il-sesso-bellezza",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
+  },
+  {
+   "id": "je7tfdd",
+   "titolo": "Legal For Digital Podcast",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Il podcast degli avvocati Brunella Martino (avvocatodellarete) e Alessandro Vercellotti (avvocatodeldigitale) nato per rendere accessibile il legal tech a tutti i professionisti del web. ",
+   "cliente": "Legal For Digital",
+   "periodo": "Da 01/23",
+   "ruoli": "Montaggio, Distribuzione",
+   "producer": "",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://www.spreaker.com/show/legal-for-digital-podcast",
+   "slug": "legal-for-digital-podcast",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
+  }
+ ]
 }
