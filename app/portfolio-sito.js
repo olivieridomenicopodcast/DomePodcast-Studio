@@ -49,7 +49,14 @@ const paragrafi = (t) => String(t || '').split(/\n\s*\n/).map((x) => x.trim()).f
   .map((x) => `<p>${inline(x).replace(/\n/g, '<br>')}</p>`).join('');
 const righe = (t) => String(t || '').split('\n').map((x) => x.trim()).filter(Boolean);
 
-export function ruoliDi(p) { return Array.isArray(p.ruoli) ? p.ruoli : String(p.ruoli || '').split(',').map((x) => x.trim()).filter(Boolean); }
+// Un tag di ruolo: solo l'iniziale maiuscola («sonorizzazione» e «SONORIZZAZIONE» diventano «Sonorizzazione»)
+export function nomeTag(t) { const s = String(t || '').trim().replace(/\s+/g, ' '); return s ? s[0].toUpperCase() + s.slice(1).toLowerCase() : ''; }
+// Ruoli di un podcast, normalizzati e senza doppioni
+export function ruoliDi(p) {
+  const arr = Array.isArray(p.ruoli) ? p.ruoli : String(p.ruoli || '').split(',');
+  const visti = new Set();
+  return arr.map(nomeTag).filter((t) => t && !visti.has(t.toLowerCase()) && visti.add(t.toLowerCase()));
+}
 export function linkDi(p) {
   return righe(p.link).map((r) => { const [n, ...u] = r.split('|'); const url = urlSicuro(u.join('|')); return url ? { nome: n.trim() || 'Ascolta', url } : null; }).filter(Boolean);
 }

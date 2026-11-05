@@ -2,7 +2,7 @@
 import { fotoSalva, fotoLeggi, fotoElimina } from './idb.js';
 import { zipStore } from './zip.js';
 import { disegnaStoria, STORIA_SFONDI, STORIA_DEF } from './storia.js';
-import { PF_VUOTO, generaSito, conSlug, slugifica, ruoliDi, pubblicati } from './portfolio-sito.js';
+import { PF_VUOTO, generaSito, conSlug, slugifica, ruoliDi, nomeTag, pubblicati } from './portfolio-sito.js';
 import { $, uid, esc, clamp, toast, processaFoto, scaricaBlob, condividiFile } from './util.js';
 import { leggiConfig, salvaConfig, provaToken, pushFile, leggiFileRepo, spiegaErrore } from './github.js';
 
@@ -43,9 +43,16 @@ let storiaId = null;
 function leggi() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY));
-    if (s && Array.isArray(s.podcast)) return { ...PF_VUOTO, clienti: [], ...s, tagRuoli: [...(s.tagRuoli || PF_VUOTO.tagRuoli)], generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } };
+    if (s && Array.isArray(s.podcast)) return pulisciTag({ ...PF_VUOTO, clienti: [], ...s, tagRuoli: [...(s.tagRuoli || PF_VUOTO.tagRuoli)], generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } });
   } catch { /* si riparte */ }
   return JSON.parse(JSON.stringify(PF_VUOTO));
+}
+// Tag sempre con la sola iniziale maiuscola e senza doppioni (anche nei dati vecchi)
+function pulisciTag(d) {
+  const visti = new Set();
+  d.tagRuoli = (d.tagRuoli || []).map(nomeTag).filter((t) => t && !visti.has(t.toLowerCase()) && visti.add(t.toLowerCase()));
+  d.podcast.forEach((p) => { p.ruoli = ruoliDi(p).join(', '); });
+  return d;
 }
 let tSalva;
 function salva() {
@@ -184,7 +191,7 @@ lista.addEventListener('click', async (ev) => {
     fotoElimina(chiave(p)); scartaUrl(chiave(p)); pf.podcast.splice(i, 1); renderLista(); salva();
   } else if (a === 'cover-del') { fotoElimina(chiave(p)); scartaUrl(chiave(p)); p.cover = false; renderLista(); salva(); }
   else if (a === 'tag-add') {
-    const inp = $('[data-newtag]', card), nome = inp.value.trim().replace(/\s+/g, ' ');
+    const inp = $('[data-newtag]', card), nome = nomeTag(inp.value);
     if (!nome) { toast('Scrivi il nome del tag'); return; }
     if (!tuttiITag(p).some((t) => mn(t) === mn(nome))) pf.tagRuoli.push(nome);
     salvaTag(p, [...ruoliDi(p), nome]); renderLista(); salva(); toast(`Tag «${nome}» aggiunto`);
@@ -422,7 +429,7 @@ $('#gh-pull').onclick = async () => {
     }
     const bozze = pf.podcast.filter((p) => p.stato === 'bozza' && !remoto.podcast.some((r) => r.id === p.id));
     pf = { ...PF_VUOTO, clienti: [], ...remoto, tagRuoli: [...(remoto.tagRuoli || pf.tagRuoli || PF_VUOTO.tagRuoli)], generale: { ...PF_VUOTO.generale, ...(remoto.generale || {}) }, podcast: [...remoto.podcast, ...bozze] };
-    salva(); await precarica(); renderLista();
+    pf = pulisciTag(pf); salva(); await precarica(); renderLista();
     ghStato(`Fatto: ${remoto.podcast.length} podcast presi dal sito.`); toast('Pull riuscito');
   } catch (e) { ghStato(e instanceof SyntaxError ? 'Il file sul sito è rovinato.' : spiegaErrore(e), true); }
 };
@@ -431,6 +438,7 @@ $('#gh-pull').onclick = async () => {
 
 export async function avviaPortfolio() {
   ghMostra();
+  salva(); // salva subito i dati ripuliti (tag normalizzati)
   await precarica();
   renderLista();
 }
