@@ -17,7 +17,7 @@ function adatta(e, c) {
   return t;
 }
 
-export function disegnaStoria(canvas, p, { cover, profilo = {}, preview = false, scala = 1 } = {}) {
+export function disegnaStoria(canvas, p, { cover, preview = false, scala = 1 } = {}) {
   const o = { ...STORIA_DEF, ...(p.storia || {}) };
   canvas.width = Math.round(STORIA_W * scala); canvas.height = Math.round(STORIA_H * scala);
   const ctx = canvas.getContext('2d');
@@ -27,22 +27,44 @@ export function disegnaStoria(canvas, p, { cover, profilo = {}, preview = false,
   const bg = brand[o.sfondo] || '#fff';
   const ink = scuro ? '#fff' : brand.viola;
   const acc = o.sfondo === 'giallo' ? brand.viola : brand.arancione;
-  const soft = scuro ? 'rgba(255,255,255,.8)' : '#4a3c8a';
+  const soft = scuro ? 'rgba(255,255,255,.88)' : '#3d2f7a';
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, STORIA_H);
   const e = { ctx };
 
   // triangoli d'angolo, come nei post
   ctx.fillStyle = scuro ? brand.arancione : brand.viola;
   ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(300, 0); ctx.lineTo(0, 300); ctx.closePath(); ctx.fill();
-  ctx.fillStyle = scuro ? brand.arancione : brand.arancione;
+  ctx.fillStyle = brand.arancione;
   ctx.beginPath(); ctx.moveTo(W, STORIA_H); ctx.lineTo(W - 220, STORIA_H); ctx.lineTo(W, STORIA_H - 220); ctx.closePath(); ctx.fill();
 
   // riga in alto: di chi è il podcast
   const riga = p.tipo === 'mio' ? 'Un mio podcast' : p.cliente ? `Podcast di ${p.cliente}` : 'Nel mio portfolio';
-  disegnaTesto(e, { text: riga, fam: 'testi', weight: 700, max: 32, min: 22, maxW: 820, maxLines: 1, lh: 1.3, x: W / 2, y: 290, align: 'center', color: acc });
+  disegnaTesto(e, { text: riga, fam: 'testi', weight: 700, max: 34, min: 22, maxW: 860, maxLines: 1, lh: 1.3, x: W / 2, y: 280, align: 'center', color: acc });
+
+  // ---- impaginazione: testo il più grande possibile (e INTERO); la cover si restringe solo se serve
+  const titoloTesto = p.titolo || (preview ? 'Titolo del podcast' : '');
+  const descTesto = String(p.breve || '').trim();
+  const extra = [o.ruolo ? ruoliDi(p).join(' · ') : '', o.data ? p.periodo : ''].filter(Boolean).join('  ·  ');
+  const yCover = 340, yFine = 1440; // il contenuto finisce prima del pulsante (y 1470) e dell'interfaccia di Instagram (y 1580)
+  const T = { fam: 'titoli', max: 104, min: 54, maxW: 920, maxLines: 2, lh: 1.04, x: W / 2, align: 'center' };
+  const prova = (cs, minD) => {
+    const t = misuraTesto(e, { ...T, text: titoloTesto });
+    const yT = yCover + cs + 56, yD = yT + t.h + 22 + 6 + 40;
+    const exH = extra ? 100 : 0;
+    const budget = yFine - exH - yD;
+    const d = descTesto ? misuraTesto(e, { fam: 'testi', max: 54, min: minD, maxW: 900, maxLines: 99, lh: 1.4, maxH: budget, text: descTesto }) : { h: 0, size: 54 };
+    return { cs, yT, yD, budget, tH: t.h, ok: !descTesto || d.h <= budget };
+  };
+  let L = null, minD = 30;
+  scelta: for (const m of [50, 44, 38, 34, 30]) for (let cs = 560; cs >= 360; cs -= 20) { const r = prova(cs, m); if (r.ok) { L = r; minD = m; break scelta; } }
+  let descFinale = descTesto;
+  if (!L) { // testo lunghissimo: taglia solo come ultima risorsa, al corpo minimo
+    L = prova(360, 30); minD = 30;
+    descFinale = adatta(e, { fam: 'testi', max: 30, min: 30, maxW: 900, maxLines: Math.max(3, Math.floor(L.budget / (30 * 1.4))), lh: 1.4, text: descTesto });
+  }
+  const cs = L.cs, cx = (W - cs) / 2, cy = yCover;
 
   // cover
-  const cs = 520, cx = (W - cs) / 2, cy = 350;
   ctx.save();
   ctx.shadowColor = 'rgba(46,25,118,.28)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 18;
   roundRect(ctx, cx, cy, cs, cs, 48); ctx.fillStyle = '#ECE8FA'; ctx.fill();
@@ -52,34 +74,27 @@ export function disegnaStoria(canvas, p, { cover, profilo = {}, preview = false,
   else {
     const g = ctx.createLinearGradient(cx, cy, cx + cs, cy + cs); g.addColorStop(0, brand.viola); g.addColorStop(1, brand.lilla);
     ctx.fillStyle = g; ctx.fillRect(cx, cy, cs, cs);
-    if (!preview || p.titolo) disegnaTesto(e, { text: p.titolo || '', fam: 'titoli', max: 100, min: 40, maxW: cs - 80, maxLines: 4, lh: 1.05, x: W / 2, y: cy + 120, align: 'center', color: '#fff' });
+    if (p.titolo) disegnaTesto(e, { text: p.titolo, fam: 'titoli', max: 100, min: 40, maxW: cs - 80, maxLines: 4, lh: 1.05, x: W / 2, y: cy + cs * 0.22, align: 'center', color: '#fff' });
   }
   ctx.restore();
-  if (!cover && preview) { // promemoria solo nell'anteprima
+  if (!cover && preview) {
     ctx.save(); ctx.fillStyle = 'rgba(255,255,255,.85)'; font(ctx, 'testi', 400, 28); ctx.textAlign = 'center';
-    ctx.fillText('(carica la cover nell\'editor)', W / 2, cy + cs - 40); ctx.restore();
+    ctx.fillText('(carica la cover nell\'editor)', W / 2, cy + cs - 30); ctx.restore();
   }
 
-  // titolo
-  const t = disegnaTesto(e, { text: p.titolo || (preview ? 'Titolo del podcast' : ''), ghost: !p.titolo, fam: 'titoli', max: 104, min: 54, maxW: 900, maxLines: 2, lh: 1.04, x: W / 2, y: 930, align: 'center', color: p.titolo ? ink : soft });
-  let y = 930 + t.h + 22;
-  ctx.fillStyle = acc; ctx.fillRect(W / 2 - 36, y, 72, 6); y += 36;
-
-  // descrizione breve
-  const dc = { fam: 'testi', max: 38, min: 28, maxW: 820, maxLines: 3, lh: 1.42, x: W / 2, align: 'center', color: soft };
-  const descr = adatta(e, { ...dc, text: p.breve || '' });
-  const d = disegnaTesto(e, { ...dc, text: descr || (preview ? 'Qui compare la descrizione breve del podcast.' : ''), ghost: !descr, y });
-  y += d.h + 22;
-
-  // ruolo e data
-  const extra = [o.ruolo ? ruoliDi(p).join(' · ') : '', o.data ? p.periodo : ''].filter(Boolean).join('  ·  ');
-  if (extra) disegnaTesto(e, { text: extra.toUpperCase(), fam: 'testi', weight: 700, max: 24, min: 18, maxW: 880, maxLines: 2, lh: 1.4, x: W / 2, y, align: 'center', color: acc });
+  // titolo, barretta, descrizione intera
+  disegnaTesto(e, { ...T, text: titoloTesto, ghost: !p.titolo, y: L.yT, color: p.titolo ? ink : soft });
+  const yBar = L.yT + L.tH + 22;
+  ctx.fillStyle = acc; ctx.fillRect(W / 2 - 40, yBar, 80, 7);
+  const d = disegnaTesto(e, { fam: 'testi', max: 54, min: minD, maxW: 900, maxLines: 99, lh: 1.4, maxH: L.budget, x: W / 2, align: 'center', y: L.yD,
+    text: descFinale || (preview ? 'Qui compare la descrizione breve del podcast.' : ''), ghost: !descFinale, color: soft });
+  if (extra) disegnaTesto(e, { text: extra.toUpperCase(), fam: 'testi', weight: 700, max: 30, min: 20, maxW: 920, maxLines: 2, lh: 1.35, x: W / 2, y: L.yD + d.h + 26, align: 'center', color: acc });
 
   // invito (pulsante) - lo sticker «Link» di Instagram si mette sotto
   if (o.invito && o.invito.trim()) {
-    font(ctx, 'testi', 700, 36);
-    const w = Math.min(820, ctx.measureText(o.invito).width + 110), h = 90, x = (W - w) / 2, by = 1470;
-    roundRect(ctx, x, by, w, h, 50); ctx.fillStyle = scuro ? '#fff' : brand.viola; ctx.fill();
+    font(ctx, 'testi', 700, 38);
+    const w = Math.min(860, ctx.measureText(o.invito).width + 120), h = 96, x = (W - w) / 2, by = 1470;
+    roundRect(ctx, x, by, w, h, 48); ctx.fillStyle = scuro ? '#fff' : brand.viola; ctx.fill();
     ctx.fillStyle = scuro ? brand.viola : '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(o.invito, W / 2, by + h / 2 + 2); ctx.textBaseline = 'alphabetic';
   }
