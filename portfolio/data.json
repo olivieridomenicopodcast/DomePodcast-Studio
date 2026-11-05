@@ -131,6 +131,30 @@
     "data": true,
     "invito": "Ascolta ora"
    }
+  },
+  {
+   "id": "syyc1wi",
+   "titolo": "Non è mai stato merito nostro",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Podcast traddo dal libro omonimo di Samuele Viganò.",
+   "cliente": "",
+   "periodo": "06/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "Rossella Pivanti",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/5STAYiD6fc9ns1Qxgz0nBN?si=643a88de9a0d4b31",
+   "slug": "non-e-mai-stato-merito-nostro",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
   }
  ]
 }
