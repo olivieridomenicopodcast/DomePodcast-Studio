@@ -1,0 +1,81 @@
+/* Impaginazione del portfolio pubblico (sobrio). Colori e font: SOLO da ../assets/brand.css. */
+.pf{margin:0;background:#fff;color:var(--viola);font:16px/1.6 var(--font-testi);-webkit-font-smoothing:antialiased}
+.pf *{box-sizing:border-box}
+.pf a{color:inherit}
+.pf img{max-width:100%}
+.pf .t{font-family:var(--font-titoli);font-weight:400;text-transform:uppercase;letter-spacing:.05em;line-height:1;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.pf h2.t{font-size:26px}
+.pf h2.t:after{content:"";display:block;width:34px;height:3px;background:var(--arancione);margin:9px 0 12px}
+.lead{margin:0 0 16px;font-size:15px;color:#5b4d97}
+.btn{display:inline-block;background:var(--viola);color:#fff!important;border-radius:30px;padding:13px 24px;font:700 15px var(--font-ui);text-decoration:none}
+.btn.sec{background:none;color:var(--viola)!important;border:2px solid var(--viola);padding:11px 22px}
+
+/* ---- intestazione */
+.hero{position:relative;padding:22px 0 30px}
+.hero:before{content:"";position:absolute;left:0;top:0;width:78px;height:78px;background:var(--viola);clip-path:polygon(0 0,100% 0,0 100%)}
+.nav{display:flex;justify-content:flex-end;gap:20px;font:600 14px var(--font-ui);min-height:30px}
+.nav a{text-decoration:none}
+.hero-in{display:flex;flex-direction:column;gap:20px;margin-top:34px}
+.autore{margin:0 0 6px;font:600 12px var(--font-ui);letter-spacing:.12em;text-transform:uppercase;color:#8b7fc0}
+.hero h1{font-size:64px}
+.motto{margin:12px 0 20px;font-size:19px;font-style:italic;color:#5b4d97}
+.pf .cta{display:inline-block;background:var(--viola);color:#fff;border-radius:30px;padding:12px 22px;font:700 15px var(--font-ui);text-decoration:none}
+.hero-foto img{display:block;width:min(260px,64vw);aspect-ratio:1;border-radius:50%;object-fit:cover}
+.num{margin:30px 0 0;padding-top:14px;border-top:1px solid var(--ui-bordo);font:600 12px var(--font-ui);letter-spacing:.06em;text-transform:uppercase;color:#6b6585}
+@media(min-width:760px){
+  .hero:before{width:130px;height:130px}.hero{padding-top:30px}
+  .hero-in{flex-direction:row;align-items:center;justify-content:space-between;margin-top:46px}
+  .hero h1{font-size:110px}.motto{font-size:24px}
+  .hero-foto img{width:300px}
+}
+
+/* ---- elenco */
+.sez{padding:34px 0 8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.chip{border:1.5px solid var(--viola);border-radius:20px;padding:6px 14px;background:#fff;color:var(--viola);font:600 13px var(--font-ui);cursor:pointer}
+.chip.on{background:var(--viola);color:#fff}
+.griglia{display:grid;grid-template-columns:1fr 1fr;gap:26px 16px}
+@media(min-width:760px){.griglia{grid-template-columns:repeat(3,1fr);gap:36px 26px}}
+.card{display:block;text-decoration:none}
+.card[hidden]{display:none}
+.cover{aspect-ratio:1;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(46,25,118,.18);background:#ECE8FA;transition:transform .2s}
+.card:hover .cover{transform:translateY(-3px)}
+.cover img{display:block;width:100%;height:100%;object-fit:cover}
+.cover.ph{display:grid;place-items:center;padding:12px;text-align:center;color:#fff;background:linear-gradient(140deg,var(--viola),var(--lilla))}
+.cover.ph b{font-size:24px}
+.card h3{margin:14px 0 2px;font-size:15px;line-height:1.3}
+.meta{font:600 11px var(--font-ui);color:#8b7fc0;letter-spacing:.06em;text-transform:uppercase}
+.card p{margin:5px 0 6px;font-size:13px;line-height:1.5;color:#4a3c8a;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.vai{font:700 12px var(--font-ui)}
+
+/* ---- pagina del podcast */
+.det{position:relative;padding:22px 0 8px;text-align:center}
+.det:before{content:"";position:absolute;left:0;top:0;width:90px;height:90px;background:var(--viola);clip-path:polygon(0 0,100% 0,0 100%)}
+.back{display:inline-block;float:right;border:1.5px solid var(--viola);border-radius:20px;padding:6px 14px;font:700 13px var(--font-ui);text-decoration:none;background:#fff}
+.det .cover{clear:both;width:min(260px,64vw);margin:30px auto 24px}
+.det h1{font-size:40px;padding:0 6px}
+.by{margin:10px 0 0;font:600 12px var(--font-ui);letter-spacing:.08em;text-transform:uppercase;color:#8b7fc0}
+.det-main .wrap{max-width:720px}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin:26px 0 8px;padding:16px;border-radius:16px;background:#F6F3FB}
+.info div{font:12px var(--font-ui);color:#6b6585}.info dt{margin:0}.info dd{margin:2px 0 0;font:700 14px var(--font-testi);color:var(--viola)}
+.blocco{margin:30px 0 0}
+.testo p{margin:0 0 12px}
+.fatto{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px}
+.fatto li{display:flex;gap:12px;align-items:center}
+.fatto .ic{flex:none;width:34px;height:34px;border-radius:11px;background:#F6F3FB;display:grid;place-items:center}
+.cit{margin:34px 0 0;padding:4px 0 4px 18px;border-left:4px solid var(--arancione);font-size:19px;font-style:italic;line-height:1.5}
+.cit cite{display:block;margin-top:8px;font:700 12px var(--font-ui);letter-spacing:.08em;text-transform:uppercase;font-style:normal;color:#8b7fc0}
+.asc{display:grid;gap:10px;max-width:420px}
+.asc .btn{text-align:center}
+.det-main .griglia{grid-template-columns:repeat(3,1fr);gap:14px}
+.det-main .card h3{font-size:13px}.det-main .card p,.det-main .card .meta{display:none}
+
+/* ---- chiusura e piede */
+.chiusura{position:relative;margin-top:44px;padding:40px 0 46px;background:#F6F3FB}
+.chiusura:after{content:"";position:absolute;right:0;bottom:0;width:70px;height:70px;background:var(--viola);clip-path:polygon(100% 0,100% 100%,0 100%)}
+.chiusura h2.t{font-size:32px}.chiusura p{margin:4px 0 18px;max-width:420px}
+.piede{padding:18px 0 26px;font:12px var(--font-ui);color:#6b6585}
+.piede .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.piede nav{display:flex;gap:14px;flex-wrap:wrap}.piede a{text-decoration:none}
+.nota-piede{margin-top:10px;font-size:11px}

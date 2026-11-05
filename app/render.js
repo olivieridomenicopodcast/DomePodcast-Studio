@@ -119,7 +119,7 @@ export function misuraTesto(e, c) { return disegnaTesto(e, { ...c, misura: true 
 
 /* ---------- foto ---------- */
 
-function coprire(o, img, w, h) {
+export function coprire(o, img, w, h) {
   const r = Math.max(w / img.width, h / img.height);
   const dw = img.width * r, dh = img.height * r;
   o.drawImage(img, (w - dw) / 2, (h - dh) / 2, dw, dh);

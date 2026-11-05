@@ -11,6 +11,7 @@ Indirizzo (GitHub Pages): https://olivieridomenicopodcast.github.io/DomePodcast-
 - [`brand-guide.html`](brand-guide.html): guida del brand (logo, palette dei post, font, regole d'uso, tono di voce).
 - [`assets/brand.css`](assets/brand.css) e [`fonts/`](fonts/): colori e font (unica fonte, in locale).
 - [`templates/post.html`](templates/post.html): i template in HTML di riferimento.
+- [`portfolio/`](portfolio/): il portfolio online (dati, immagini, stile e pagine generate).
 - `index.html`, [`app/`](app/), `sw.js`, `manifest.webmanifest`, `icons/`: la PWA.
 
 ## Cosa fa l'app
@@ -19,6 +20,7 @@ Indirizzo (GitHub Pages): https://olivieridomenicopodcast.github.io/DomePodcast-
 - **Elementi grafici:** frecce, triangoli, icone, forme, linee e numeri da una libreria; colore, dimensione e rotazione si regolano, la posizione si trascina col dito.
 - **Salva:** «Scarica» (Download del telefono), «Condividi» (menu del telefono), «Scarica zip».
 - **Brief per Claude:** genera il messaggio da incollare in Claude Code, con le foto numerate da condividere e la casella per chiedere un nuovo template o elemento.
+- **Portfolio:** editor del portfolio online. Aggiungi i podcast (cover, descrizione, ruolo, pagina di dettaglio con racconto, citazione e link), guarda l'anteprima, crea la **storia Instagram** di ogni podcast (cover, nome e descrizione in formato 9:16) ed esporta il sito pronto da pubblicare. Il portfolio pubblicato è di sola lettura: `…/DomePodcast-Studio/portfolio/`.
 - **Impostazioni:** handle, nome, descrizione e foto profilo, installazione, elenco di template ed elementi, cancellazione dati.
 
 Testi e foto restano sul telefono (localStorage e IndexedDB). In basso a sinistra compare «build N» (numero di commit): l'app avvisa quando ce n'è una più nuova.

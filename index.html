@@ -22,7 +22,8 @@
 </header>
 <nav class="tabs" role="tablist">
   <button data-tab="crea" class="on" role="tab">Crea</button>
-  <button data-tab="brief" role="tab">Brief per Claude</button>
+  <button data-tab="portfolio" role="tab">Portfolio</button>
+  <button data-tab="brief" role="tab">Brief</button>
   <button data-tab="impostazioni" role="tab">Impostazioni</button>
 </nav>
 <div id="aggiorna" class="banner" hidden></div>
@@ -37,6 +38,25 @@
       <button id="condividi" class="btn sec" type="button">Condividi</button>
       <button id="zip" class="btn sec" type="button">Scarica zip</button>
       <p class="nota">«Scarica» salva le immagini nei Download del telefono. «Condividi» apre il menu del telefono (WhatsApp, Instagram…).</p>
+    </div>
+  </section>
+
+  <section id="tab-portfolio" class="tab">
+    <p class="nota">Qui costruisci il tuo portfolio online: aggiungi i podcast, scrivi le pagine e crea le storie Instagram. Poi esporti e me lo fai pubblicare.</p>
+    <p id="pf-riepilogo" class="nota"></p>
+    <div class="azioni">
+      <button id="pf-nuovo" class="btn" type="button">+ Nuovo podcast</button>
+      <button id="pf-anteprima" class="btn sec" type="button">Anteprima del portfolio</button>
+    </div>
+    <details class="blocco" id="pf-gen"><summary>Pagina del portfolio (titoli, foto, contatti)</summary><div id="pf-gen-campi"></div></details>
+    <div id="pf-lista"></div>
+    <div class="blocco"><h2>Pubblica</h2>
+      <p class="nota">Esporta il sito pronto (zip), poi incolla il messaggio e allega lo zip in Claude Code: ci penso io a metterlo online.</p>
+      <div class="azioni">
+        <button id="pf-zip" class="btn" type="button">Scarica lo zip</button>
+        <button id="pf-zip-share" class="btn sec" type="button">Condividi lo zip</button>
+        <button id="pf-copia" class="btn sec" type="button">Copia il messaggio per Claude</button>
+      </div>
     </div>
   </section>
 
@@ -81,6 +101,15 @@
   </section>
 </main>
 
+<div id="pf-overlay" class="overlay" hidden><div class="overlay-top"><button id="pf-chiudi" class="btn sec piccolo" type="button">← Chiudi</button><span class="nota">Anteprima: così apparirà online</span></div><iframe id="pf-frame" title="Anteprima portfolio"></iframe></div>
+<div id="storia-overlay" class="overlay" hidden><div class="overlay-top"><button id="st-chiudi" class="btn sec piccolo" type="button">← Chiudi</button><b id="st-titolo"></b></div>
+  <div class="overlay-corpo"><canvas id="st-canvas" class="storia"></canvas>
+    <div class="storia-ctrl"><div class="campo"><span>Sfondo</span><div id="st-sfondi" class="chips"></div></div>
+      <label class="spunta"><input type="checkbox" id="st-ruolo"> Mostra il mio ruolo</label>
+      <label class="spunta"><input type="checkbox" id="st-data"> Mostra il periodo</label>
+      <label class="campo"><span>Invito (lascia vuoto per toglierlo)</span><input type="text" id="st-invito"></label>
+      <p class="nota">Le linee tratteggiate sono le zone coperte dall'interfaccia di Instagram: non finiscono nell'immagine. Il link si aggiunge con lo sticker «Link» di Instagram.</p>
+      <div class="azioni"><button id="st-scarica" class="btn" type="button">Scarica</button><button id="st-condividi" class="btn sec" type="button">Condividi</button></div></div></div></div>
 <div id="picker" class="picker" hidden><div class="picker-in"><div class="picker-top"><b>Scegli un elemento</b><button id="picker-chiudi" class="btn sec" type="button">Chiudi</button></div><div id="picker-lista"></div></div></div>
 <div id="toast" class="toast" hidden></div>
 <div id="build" class="build">build …</div>

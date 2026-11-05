@@ -1,0 +1,24 @@
+{
+ "v": 1,
+ "generale": {
+  "nome": "Olivieri Domenico",
+  "titolo": "Portfolio",
+  "motto": "La tua voce, il mio sound.",
+  "foto": false,
+  "introTitolo": "I podcast di chi mi ha scelto",
+  "introTesto": "Progetti realizzati per autori, aziende e professionisti.",
+  "mieiTitolo": "I miei podcast",
+  "mieiTesto": "I progetti nati da me, per sperimentare e divertirmi.",
+  "ctaTitolo": "Lavoriamo insieme?",
+  "ctaTesto": "Raccontami il tuo podcast: ti aiuto in ogni fase del processo audio.",
+  "ctaBottone": "Scrivimi",
+  "ctaLink": "",
+  "instagram": "https://www.instagram.com/domenicoolivieri_/",
+  "linkedin": "",
+  "youtube": "",
+  "sito": "https://olivieridomenico.it",
+  "nota": "",
+  "baseUrl": "https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/"
+ },
+ "podcast": []
+}

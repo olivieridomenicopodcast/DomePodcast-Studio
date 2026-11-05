@@ -43,3 +43,21 @@ L'app mostra «build N», con N = numero di commit; se online c'è una build pi�
 
 ### Service worker (`sw.js`)
 Strategia stale-while-revalidate. Tutti i file usati dall'app (anche quelli di `brand/`) vanno nella lista `FILE`. Se aggiungi un file nuovo, aggiornala.
+
+## Portfolio online (scheda «Portfolio» dell'app + cartella `portfolio/`)
+Niky costruisce il portfolio dall'app (scheda **Portfolio**): aggiunge i podcast, scrive le pagine, crea le storie Instagram. Il sito pubblicato è **statico e di sola lettura**: https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/ (elenco + una pagina per podcast: `portfolio/<slug>/`).
+- **Stile:** sobrio (bianco, piccoli triangoli viola nell'angolo, riga arancione sotto i titoli, cover con angoli tondi). Colori e font solo da `assets/brand.css`; impaginazione in `portfolio/stile.css`.
+- **Codice:** `app/portfolio-sito.js` (generatore delle pagine, funziona nel browser e in Node), `app/portfolio.js` (editor nell'app), `app/storia.js` (storia Instagram 1080×1920), `app/util.js` (funzioni comuni).
+- **Dati:** `portfolio/data.json` (testi e impostazioni di tutti i podcast, anche le bozze), immagini in `portfolio/img/` (`<slug>.jpg`, `foto.jpg`). Il resto di `portfolio/` (index.html e le cartelle dei podcast) è **generato**: non modificarlo a mano.
+
+### Quando Niky incolla il messaggio «Pubblica il portfolio aggiornato» (con `portfolio-sito.zip`)
+1. Scompatta lo zip in `portfolio/`, sostituendo i file (index.html, cartelle dei podcast, `stile.css`, `img/`, `data.json`). Se mancano podcast che c'erano prima, chiedi conferma prima di cancellarne le cartelle.
+2. **Immagini dei clienti:** le cover dei podcast dei clienti hanno copyright e il repo è pubblico. Vale la regola generale (non committarle). Prima di committare `portfolio/img/` chiedi a Niky conferma esplicita, in quella conversazione, di avere l'ok dei clienti a pubblicarle; senza conferma pubblica le pagine senza cover (compare il segnaposto).
+3. Verifica con Playwright (viewport da telefono): elenco e pagine dei podcast si aprono, immagini caricate, nessun errore in console.
+4. `sh scripts/aggiorna-build.sh && git add app/build.js`, commit, push, merge in `main` (fast-forward) e avvisa Niky con l'indirizzo.
+- Per rigenerare le pagine dai dati senza lo zip: `node scripts/genera-portfolio.mjs`.
+- Per un cambio di grafica del portfolio modifica `app/portfolio-sito.js` / `portfolio/stile.css`, poi rigenera.
+- I link nei dati sono filtrati: solo `https://`, `http://` e `mailto:`.
+
+### Storie Instagram dei podcast
+Dal pulsante «Crea storia» di ogni podcast (cover, titolo, descrizione breve, ruolo, periodo, invito). Formato 9:16, contenuto nella fascia centrale (le zone coperte dall'interfaccia di Instagram restano libere). Non vengono salvate nel repo: si scaricano o condividono dal telefono.

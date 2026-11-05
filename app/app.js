@@ -5,12 +5,10 @@ import { LAYOUTS, LAYOUT_MAP } from './layouts.js';
 import { ELEMENTI, ELEM_MAP, GRUPPI, disegnaElemento, colpisce } from './elementi.js';
 import { zipStore } from './zip.js';
 import { fotoSalva, fotoLeggi, fotoElimina, fotoSvuota } from './idb.js';
+import { $, uid, esc, clamp, pausa, toast, processaFoto, scaricaBlob, condividiFile } from './util.js';
+import { avviaPortfolio } from './portfolio.js';
 
 const KEY = 'dps-stato-v1';
-const $ = (s, r = document) => r.querySelector(s);
-const uid = () => Math.random().toString(36).slice(2, 9);
-const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
 const PROFILO = { handle: '@domenicoolivieri_', nome: 'Domenico Olivieri', descr: 'Podcast coach, editor e sound designer' };
 const SFONDI = ['bianco', 'giallo', 'arancione', 'viola', 'lilla'];
@@ -51,27 +49,11 @@ function salva() {
 }
 addEventListener('pagehide', () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch {} });
 
-function toast(msg) {
-  const t = $('#toast'); t.textContent = msg; t.hidden = false;
-  clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 3200);
-}
 
 const slideById = (id) => st.slides.find((s) => s.id === id);
 const fmt = () => FORMATI[st.formato];
 
 /* ---------- foto ---------- */
-
-async function processaFoto(file, max, taglia) {
-  let bmp;
-  try { bmp = await createImageBitmap(file, { imageOrientation: 'from-image' }); } catch { bmp = await createImageBitmap(file); }
-  let r = { x: 0, y: 0, w: bmp.width, h: bmp.height };
-  if (taglia) r = ritagliaBarreNere(bmp);
-  const sc = Math.min(1, max / Math.max(r.w, r.h));
-  const c = document.createElement('canvas'); c.width = Math.round(r.w * sc); c.height = Math.round(r.h * sc);
-  c.getContext('2d').drawImage(bmp, r.x, r.y, r.w, r.h, 0, 0, c.width, c.height);
-  const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.9));
-  return { blob, tagliata: r.w < bmp.width - 2 || r.h < bmp.height - 2 };
-}
 
 async function caricaImmagine(id) {
   if (!id || immagini.has(id)) return;
@@ -386,11 +368,6 @@ async function rendiPNG(s) {
   disegnaSlide(c, s, opzioniDisegno(s, false)); // preview=false: niente testi di esempio
   return new Promise((ok) => c.toBlob(ok, 'image/png'));
 }
-function scaricaBlob(blob, nome) {
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = nome;
-  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-}
-const pausa = (ms) => new Promise((r) => setTimeout(r, ms));
 async function tutte() { const out = []; for (let i = 0; i < st.slides.length; i++) out.push({ name: nomeFile(i), blob: await rendiPNG(st.slides[i]) }); return out; }
 
 $('#scarica').onclick = async () => {
@@ -407,12 +384,6 @@ $('#zip').onclick = async () => {
   const files = await Promise.all(f.map(async (x) => ({ name: x.name, data: new Uint8Array(await x.blob.arrayBuffer()) })));
   scaricaBlob(zipStore(files), `${fmt().sigla}.zip`); toast('Zip salvato nei Download');
 };
-async function condividiFile(files) {
-  try {
-    if (navigator.canShare && navigator.canShare({ files })) await navigator.share({ files, title: 'DomePodcast Studio' });
-    else toast('Questo telefono non può condividere i file da qui: usa «Scarica».');
-  } catch (e) { if (e && e.name !== 'AbortError') toast('Condivisione non riuscita: usa «Scarica».'); }
-}
 
 /* ---------- brief per Claude ---------- */
 
@@ -553,6 +524,7 @@ async function avvia() {
   for (const s of st.slides) if (s.foto && s.foto.id) await caricaImmagine(s.foto.id);
   renderFormati(); renderSlides(); impostazioni();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  avviaPortfolio();
   controllaAggiornamenti(false);
   document.documentElement.dataset.pronto = '1';
 }
