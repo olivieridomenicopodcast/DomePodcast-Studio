@@ -1,6 +1,6 @@
 // layouts.js - CATALOGO dei template (tipi di slide) di DomePodcast Studio.
 // Ogni layout: id, nome, descrizione, valori iniziali (sfondo, accento, intestazione), campi di testo,
-// opzioni, foto (se ha uno spazio per la foto), elementiIniziali e draw(e, s).
+// opzioni, foto (se ha uno spazio per la foto) e draw(e, s). Nessun layout inserisce elementi grafici da solo (elementiIniziali, facoltativo, non è usato).
 //  - e = contesto di disegno (vedi creaContesto in render.js): e.ctx, e.W, e.top, e.bottom, e.s (scala verticale), e.y(v)
 //    (y in coordinate 1350 -> y reale), e.ink / e.dark / e.deco / e.acc / e.sec (colori in base a sfondo e accento).
 //  - Usa disegnaTesto per i testi (dimensione adattiva) e testo(e, s, 'campo', 'segnaposto') per i valori:
@@ -68,7 +68,7 @@ export const LAYOUTS = [
   },
   {
     id: 'singolo', nome: 'Post singolo illustrato',
-    descrizione: 'Triangolo viola, titolo a due colori, invito e illustrazioni (si aggiungono dagli elementi).',
+    descrizione: 'Triangolo viola, titolo a due colori e invito. Le illustrazioni si aggiungono dagli elementi grafici.',
     sfondo: 'bianco', accento: 'viola', intestazione: false,
     campi: [
       { k: 'titolo', label: 'Titolo, prima parte (colore chiaro)', tipo: 'area', seg: 'Prima parte\ndel titolo,' },
@@ -76,12 +76,6 @@ export const LAYOUTS = [
       { k: 'invito', label: 'Invito (es. Leggi la caption!)', tipo: 'testo', seg: 'Leggi la caption!' },
     ],
     opzioni: [],
-    elementiIniziali: [
-      { tipo: 'fabbrica', c: 'giallo', x: 0.245, y: 0.655, w: 300, r: 0 },
-      { tipo: 'onde-sonore', c: 'lilla', x: 0.31, y: 0.83, w: 400, r: 0 },
-      { tipo: 'microfono', c: 'lilla', x: 0.31, y: 0.83, w: 230, r: 0 },
-      { tipo: 'freccia-curva-giu', c: 'viola', x: 0.555, y: 0.84, w: 150, r: 0 },
-    ],
     draw(e, s) {
       const { W } = e;
       angoloAlto(e, W * 0.667);
