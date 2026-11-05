@@ -5,7 +5,7 @@ const CACHE = 'domepodcast-studio-v1';
 const FILE = [
   './', 'index.html', 'manifest.webmanifest',
   'app/app.css', 'app/app.js', 'app/layouts.js', 'app/elementi.js', 'app/render.js', 'app/zip.js', 'app/idb.js', 'app/build.js',
-  'app/util.js', 'app/portfolio.js', 'app/portfolio-sito.js', 'app/storia.js', 'portfolio/stile.css',
+  'app/util.js', 'app/github.js', 'app/portfolio.js', 'app/portfolio-sito.js', 'app/storia.js', 'portfolio/stile.css',
   'assets/brand.css',
   'brand/logo/ufficiale/logo-ufficiale.svg',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png',

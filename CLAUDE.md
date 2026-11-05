@@ -60,5 +60,10 @@ Niky costruisce il portfolio dall'app (scheda **Portfolio**): aggiunge i podcast
 - Per un cambio di grafica del portfolio modifica `app/portfolio-sito.js` / `portfolio/stile.css`, poi rigenera.
 - I link nei dati sono filtrati: solo `https://`, `http://` e `mailto:`.
 
+### Sincronizzazione dall'app (Push / Pull con token GitHub)
+L'app può committare **direttamente su `main`** (solo dentro `portfolio/`: pagine, `img/`, `data.json`) con il token di Niky, salvato solo sul suo telefono (`app/github.js`). Il Push manda solo i podcast pubblicati (le bozze restano sul telefono) e cancella le pagine/immagini generate dei podcast tolti; non tocca `portfolio/stile.css`. Il Pull riprende `data.json` e le cover.
+- Quindi `main` può avere commit che non stanno nel tuo branch: prima di lavorare e prima di portare qualcosa in `main` fai `git fetch origin main` e, se è andato avanti, `git merge origin/main` (mai rebase, mai push forzato) e poi merge fast-forward in `main`.
+- Non scrivere mai il token nel repo, nei log o nei test. Per provare il push/pull usa un finto server GitHub in locale (l'indirizzo dell'API è un'impostazione: campo `api` della chiave `dps-gh-v1`).
+
 ### Storie Instagram dei podcast
 Dal pulsante «Crea storia» di ogni podcast (cover, titolo, descrizione breve, ruolo, periodo, invito). Formato 9:16, contenuto nella fascia centrale (le zone coperte dall'interfaccia di Instagram restano libere). Non vengono salvate nel repo: si scaricano o condividono dal telefono.

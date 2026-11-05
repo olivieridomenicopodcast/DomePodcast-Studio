@@ -57,6 +57,17 @@
       <div class="riga-btn"><button id="pf-cl-nuovo" class="btn piccolo" type="button">+ Aggiungi un cliente</button><button id="pf-cl-import" class="btn sec piccolo" type="button">Aggiungi i clienti dei podcast</button></div>
     </details>
     <div id="pf-lista"></div>
+    <div class="blocco"><h2>Sincronizza con GitHub</h2>
+      <p class="nota">⬆ <b>Push</b> manda il portfolio online (un commit diretto su GitHub). ⬇ <b>Pull</b> riprende dal sito i podcast, le cover e le impostazioni (utile su un altro telefono o dopo aver cancellato i dati).</p>
+      <label class="campo"><span>Token GitHub</span><input type="password" id="gh-token" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="github_pat_…"></label>
+      <div class="riga-btn"><button id="gh-mostra" class="btn sec piccolo" type="button">Mostra / nascondi</button><button id="gh-prova" class="btn sec piccolo" type="button">Prova il token</button></div>
+      <details><summary>Repo e ramo (avanzato)</summary>
+        <label class="campo"><span>Repo (proprietario/nome)</span><input type="text" id="gh-repo" autocapitalize="none"></label>
+        <label class="campo"><span>Ramo</span><input type="text" id="gh-branch" autocapitalize="none"></label></details>
+      <div class="azioni"><button id="gh-push" class="btn" type="button">⬆ Push (invia al sito)</button><button id="gh-pull" class="btn sec" type="button">⬇ Pull (prendi dal sito)</button></div>
+      <p id="gh-stato" class="nota"></p>
+      <p class="nota">Il token resta solo su questo telefono, non va mai nel repo. Usa un token «fine-grained» limitato a DomePodcast-Studio con permesso <i>Contents: Read and write</i>. Attenzione: sullo stesso indirizzo (olivieridomenicopodcast.github.io) stanno anche le altre tue app: non usare un token valido per altri repo.</p>
+    </div>
     <div class="blocco"><h2>Pubblica</h2>
       <p class="nota">Esporta il sito pronto (zip), poi incolla il messaggio e allega lo zip in Claude Code: ci penso io a metterlo online.</p>
       <div class="azioni">

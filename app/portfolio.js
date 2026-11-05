@@ -4,6 +4,7 @@ import { zipStore } from './zip.js';
 import { disegnaStoria, STORIA_SFONDI, STORIA_DEF } from './storia.js';
 import { PF_VUOTO, generaSito, conSlug, slugifica, ruoliDi, pubblicati } from './portfolio-sito.js';
 import { $, uid, esc, clamp, toast, processaFoto, scaricaBlob, condividiFile } from './util.js';
+import { leggiConfig, salvaConfig, provaToken, pushFile, leggiFileRepo, spiegaErrore } from './github.js';
 
 const KEY = 'dps-portfolio-v1';
 const GEN = [
@@ -282,21 +283,28 @@ $('#st-condividi').onclick = async () => { const { blob, nome } = await pngStori
 
 /* ---------- esportazione per la pubblicazione ---------- */
 
-async function costruisciZip() {
+// File del sito pronti da pubblicare. Nei dati (data.json) vanno solo i podcast pubblicati: le bozze restano sul telefono.
+async function costruisciFile() {
   const enc = new TextEncoder();
-  const files = generaSito(pf, {});
+  const pubbl = { ...pf, podcast: pf.podcast.filter((p) => p.stato !== 'bozza') };
+  const files = generaSito(pubbl, {});
   const out = Object.entries(files).map(([name, txt]) => ({ name, data: enc.encode(txt) }));
-  const css = await (await fetch('portfolio/stile.css')).arrayBuffer();
-  out.push({ name: 'stile.css', data: new Uint8Array(css) });
-  const lista2 = conSlug(pf), slugDi = new Map(lista2.map((p) => [p.id, p.slug]));
+  const lista2 = conSlug(pubbl), slugDi = new Map(lista2.map((p) => [p.id, p.slug]));
+  let nCover = 0;
   for (const p of lista2) {
     if (!p.cover) continue;
-    const bl = await fotoLeggi(chiave(p)); if (bl) out.push({ name: `img/${p.slug}.jpg`, data: new Uint8Array(await bl.arrayBuffer()) });
+    const bl = await fotoLeggi(chiave(p)); if (bl) { out.push({ name: `img/${p.slug}.jpg`, data: new Uint8Array(await bl.arrayBuffer()) }); nCover++; }
   }
   if (pf.generale.foto) { const bl = await fotoLeggi('pf-hero'); if (bl) out.push({ name: 'img/foto.jpg', data: new Uint8Array(await bl.arrayBuffer()) }); }
-  const dati = { ...pf, podcast: pf.podcast.map((p) => ({ ...p, slug: slugDi.get(p.id) || p.slug })) };
+  const dati = { ...pubbl, podcast: pubbl.podcast.map((p) => ({ ...p, slug: slugDi.get(p.id) || p.slug })) };
   out.push({ name: 'data.json', data: enc.encode(JSON.stringify(dati, null, 1)) });
-  return { blob: zipStore(out), n: lista2.length };
+  return { out, n: lista2.length, nCover };
+}
+async function costruisciZip() {
+  const { out, n } = await costruisciFile();
+  const css = await (await fetch('portfolio/stile.css')).arrayBuffer();
+  out.push({ name: 'stile.css', data: new Uint8Array(css) });
+  return { blob: zipStore(out), n };
 }
 $('#pf-zip').onclick = async () => {
   if (!pubblicati(pf).length) { toast('Nessun podcast pubblicato da esportare'); return; }
@@ -320,9 +328,70 @@ $('#pf-copia').onclick = async () => {
   try { await navigator.clipboard.writeText(testo); toast('Messaggio copiato: incollalo in Claude Code'); } catch { toast('Non riesco a copiare: riprova'); }
 };
 
+
+/* ---------- sincronizzazione con GitHub (push / pull) ---------- */
+
+const ghStato = (t, errore) => { const el = $('#gh-stato'); el.textContent = t; el.style.color = errore ? '#b3261e' : ''; };
+function ghConfigDaCampi() {
+  const c = { ...leggiConfig(), token: $('#gh-token').value.trim(), repo: $('#gh-repo').value.trim(), branch: $('#gh-branch').value.trim() || 'main' };
+  salvaConfig(c); return c;
+}
+function ghMostra() { const c = leggiConfig(); $('#gh-token').value = c.token; $('#gh-repo').value = c.repo; $('#gh-branch').value = c.branch; }
+['#gh-token', '#gh-repo', '#gh-branch'].forEach((s) => $(s).addEventListener('change', ghConfigDaCampi));
+$('#gh-mostra').onclick = () => { const i = $('#gh-token'); i.type = i.type === 'password' ? 'text' : 'password'; };
+function ghPronto() { const c = ghConfigDaCampi(); if (!c.token) { ghStato('Incolla prima il token.', true); return null; } return c; }
+
+$('#gh-prova').onclick = async () => {
+  const c = ghPronto(); if (!c) return;
+  try { ghStato('Controllo…'); const r = await provaToken(c); ghStato(r.puoScrivere ? `Token valido: posso scrivere su ${r.nome}.` : `Il token legge ${r.nome} ma NON può scrivere: serve «Contents: Read and write».`, !r.puoScrivere); }
+  catch (e) { ghStato(spiegaErrore(e), true); }
+};
+
+$('#gh-push').onclick = async () => {
+  const c = ghPronto(); if (!c) return;
+  if (!pubblicati(pf).length) { ghStato('Nessun podcast pubblicato da inviare.', true); return; }
+  try {
+    ghStato('Preparo i file…');
+    const { out, n, nCover } = await costruisciFile();
+    if (!confirm(`⬆ Push: invio al sito ${n} podcast${nCover ? ` e ${nCover} cover` : ''} su ${c.repo}.\n\nIl repo è PUBBLICO: tutto diventa visibile a chiunque. Le cover sono immagini dei clienti: confermi di avere il loro ok a pubblicarle? Le bozze non vengono inviate.`)) { ghStato('Push annullato.'); return; }
+    const r = await pushFile(c, 'portfolio', out.map((f) => ({ path: f.name, data: f.data })), 'Portfolio: aggiornamento dall\'app', ghStato);
+    ghStato(r.cambiato ? 'Fatto: il portfolio è stato inviato. Online tra circa un minuto.' : 'Il sito è già aggiornato: niente da inviare.');
+    if (r.cambiato) toast('Push riuscito');
+  } catch (e) { ghStato(spiegaErrore(e), true); }
+};
+
+$('#gh-pull').onclick = async () => {
+  const c = ghPronto(); if (!c) return;
+  try {
+    ghStato('Scarico i dati dal sito…');
+    const bl = await leggiFileRepo(c, 'portfolio/data.json');
+    if (!bl) { ghStato('Sul sito non c\'è ancora nessun portfolio (manca portfolio/data.json).', true); return; }
+    const remoto = JSON.parse(await bl.text());
+    if (!remoto || !Array.isArray(remoto.podcast)) { ghStato('Il file sul sito non è nel formato giusto.', true); return; }
+    if (!confirm(`⬇ Pull: sostituisco i podcast sul telefono con quelli del sito (${remoto.podcast.length}). Le tue bozze restano. Continuo?`)) { ghStato('Pull annullato.'); return; }
+    let i = 0;
+    for (const p of remoto.podcast) {
+      ghStato(`Scarico le cover… ${++i}/${remoto.podcast.length}`);
+      if (p.cover) {
+        const img = await leggiFileRepo(c, `portfolio/img/${p.slug}.jpg`);
+        if (img) { await fotoSalva(chiave(p), img); scartaUrl(chiave(p)); } else p.cover = false;
+      }
+    }
+    if (remoto.generale && remoto.generale.foto) {
+      const h = await leggiFileRepo(c, 'portfolio/img/foto.jpg');
+      if (h) { await fotoSalva('pf-hero', h); scartaUrl('pf-hero'); } else remoto.generale.foto = false;
+    }
+    const bozze = pf.podcast.filter((p) => p.stato === 'bozza' && !remoto.podcast.some((r) => r.id === p.id));
+    pf = { ...PF_VUOTO, clienti: [], ...remoto, generale: { ...PF_VUOTO.generale, ...(remoto.generale || {}) }, podcast: [...remoto.podcast, ...bozze] };
+    salva(); await precarica(); renderLista();
+    ghStato(`Fatto: ${remoto.podcast.length} podcast presi dal sito.`); toast('Pull riuscito');
+  } catch (e) { ghStato(e instanceof SyntaxError ? 'Il file sul sito è rovinato.' : spiegaErrore(e), true); }
+};
+
 /* ---------- avvio ---------- */
 
 export async function avviaPortfolio() {
+  ghMostra();
   await precarica();
   renderLista();
 }
