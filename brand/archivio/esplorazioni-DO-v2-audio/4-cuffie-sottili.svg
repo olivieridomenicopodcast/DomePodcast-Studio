@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="600" height="600"><defs>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A1FA6"/><stop offset="1" stop-color="#5B45F2"/></linearGradient>
+<clipPath id="c"><path d="M44 52H84A48 48 0 0 1 84 148H44Z M60 68H84A32 32 0 0 1 84 132H60Z" clip-rule="evenodd"/></clipPath>
+<mask id="mm"><rect x="90" y="40" width="44" height="70" fill="#fff"/><g stroke="#000" stroke-width="4" stroke-linecap="round"><path d="M100 66H124M100 74H124M100 82H124"/></g></mask></defs>
+<rect width="200" height="200" rx="46" fill="url(#g)"/><path d="M32 112A68 68 0 0 1 168 112" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+<rect x="22" y="106" width="16" height="44" rx="8" fill="#fff"/><rect x="162" y="106" width="16" height="44" rx="8" fill="#fff"/><g transform="translate(100 118) scale(.7) translate(-114 -100)"><circle cx="136" cy="100" r="40" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="16"/>
+<path d="M44 52H84A48 48 0 0 1 84 148H44Z M60 68H84A32 32 0 0 1 84 132H60Z" fill="#fff" fill-rule="evenodd"/>
+<g clip-path="url(#c)"><circle cx="136" cy="100" r="40" fill="none" stroke="#12152B" stroke-width="16"/></g></g></svg>

@@ -1,0 +1,42 @@
+{
+  "nome": "Olivieri Domenico",
+  "sigla": "DO",
+  "descrizione": "Podcast coach, editor e sound designer",
+  "payoff_lockup": "PODCAST COACH · EDITOR · SOUND DESIGNER",
+  "logo_ufficiale": {
+    "icona": "logo/ufficiale/logo-ufficiale.svg",
+    "orizzontale": "logo/ufficiale/logo-ufficiale-orizzontale.svg",
+    "descrizione": "Monogramma DO (D e O intrecciate, con due onde sonore che escono dalla O) in bianco su quadrato arrotondato con sfumatura indaco."
+  },
+  "colori": {
+    "indaco_scuro": "#2A1FA6",
+    "indaco": "#5B45F2",
+    "indaco_testo_secondario": "#D9D3FF",
+    "o_lilla": "#ECE8FA",
+    "blu_notte": "#12152B",
+    "nero": "#0B0B0F",
+    "arancione": "#FF5A00",
+    "arancione_chiaro": "#FF8A2B",
+    "arancione_crema": "#FFEEDD",
+    "bianco": "#FFFFFF"
+  },
+  "sfumature": {
+    "indaco": ["#2A1FA6", "#5B45F2"],
+    "arancione": ["#FF5A00", "#FF8A2B"],
+    "direzione": "verticale, dall'alto verso il basso"
+  },
+  "tipografia": {
+    "font": "Inter",
+    "nome": {"peso": "SemiBold", "maiuscolo": true, "tracking_em": 0.09},
+    "descrizione": {"peso": "Medium", "maiuscolo": true, "tracking_em": 0.2},
+    "nota": "Il testo negli SVG e' gia' convertito in tracciati: non serve installare il font per usare i file."
+  },
+  "geometria_icona": {
+    "viewBox": "0 0 200 200",
+    "angoli_arrotondati": 46,
+    "D": "M44 52H84A48 48 0 0 1 84 148H44Z M60 68H84A32 32 0 0 1 84 132H60Z (fill-rule evenodd)",
+    "O": "cerchio centro (136,100) raggio 40 spessore 16",
+    "onde": "archi di raggio 61 e 77 attorno al centro della O, da -40 a +40 gradi, spessore 7, la seconda al 50% di opacita'",
+    "incrocio": "l'intersezione fra D e O e' colorata a parte (nell'ufficiale blu notte #12152B) oppure svuotata nelle versioni monocolore"
+  }
+}
