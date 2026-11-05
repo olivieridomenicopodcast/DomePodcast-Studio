@@ -124,7 +124,7 @@
    "citAutore": "",
    "link": "https://open.spotify.com/show/2QC81C9BalmOR78Zrph0Gq?si=70551c93fc494942",
    "slug": "lavoraci-su",
-   "cover": false,
+   "cover": true,
    "storia": {
     "sfondo": "bianco",
     "ruolo": true,
