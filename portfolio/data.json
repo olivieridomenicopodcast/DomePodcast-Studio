@@ -155,6 +155,30 @@
     "data": true,
     "invito": "Ascolta ora"
    }
+  },
+  {
+   "id": "dmdcawx",
+   "titolo": "Prendila con coraggio",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "",
+   "cliente": "Stella Marzetta",
+   "periodo": "01/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/2CfG3jvseVpJAgr0d2vPgK?si=171edeb709ef4708",
+   "slug": "prendila-con-coraggio",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
   }
  ]
 }
