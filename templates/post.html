@@ -1,0 +1,97 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><title>Template post – DomePodcast Studio</title>
+<link rel="stylesheet" href="../assets/brand.css">
+<style>
+/* Template di riferimento (1080x1350). Testi e foto sono segnaposto. */
+body{margin:0;background:#ddd;display:flex;flex-wrap:wrap;gap:20px;padding:20px}
+.slide{position:relative;width:1080px;height:1350px;background:#fff;overflow:hidden;font-family:var(--font-testi);color:var(--viola);flex:none}
+.slide svg{position:absolute;overflow:visible}
+.t{font-family:var(--font-titoli);text-transform:uppercase;letter-spacing:.05em;line-height:1.05}
+.hd{position:absolute;left:64px;top:46px;display:flex;gap:24px;align-items:center}
+.av{width:104px;height:104px;border-radius:50%;background:linear-gradient(135deg,#cfc6ea,#a98bee)}
+.hd b{display:block;font-size:32px;line-height:1.15}.hd span{display:block;font-size:22px;font-weight:700;line-height:1.3;width:260px}
+.abs{position:absolute}
+.foto{position:absolute;border-radius:36px;background:linear-gradient(135deg,#d9d3ff,#a98bee 60%,#f4b162);
+ -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.foto::after{content:"FOTO";position:absolute;inset:0;display:grid;place-items:center;font:60px var(--font-titoli);color:#fff;letter-spacing:.1em}
+</style></head><body>
+
+<!-- 1 Copertina con triangolo -->
+<div class="slide" id="copertina">
+ <svg width="1080" height="1350"><polygon points="0,0 720,0 0,720" fill="#EE8F4D"/></svg>
+ <div class="t abs" style="right:105px;top:215px;text-align:right;font-size:116px;width:870px"><span style="color:var(--viola)">Titolo della</span><br><span style="color:var(--giallo)">copertina qui</span></div>
+ <div class="foto" style="left:108px;top:600px;width:550px;height:550px"></div>
+ <div class="abs" style="right:50px;top:595px;width:340px;text-align:right;font-size:47px;line-height:1.2">Sottotitolo o breve descrizione</div>
+ <div class="abs" style="right:132px;top:990px;font-size:44px;color:var(--arancione)">Sbircia!</div>
+ <svg style="left:715px;top:1070px" width="285" height="85"><rect y="36" width="230" height="10" fill="#2E1976"/><polygon points="190,0 285,41 190,85" fill="#2E1976"/></svg>
+</div>
+
+<!-- 2 Post singolo illustrato -->
+<div class="slide" id="singolo">
+ <svg width="1080" height="1350"><polygon points="0,0 720,0 0,720" fill="#2E1976"/></svg>
+ <div class="t abs" style="right:128px;top:265px;text-align:right;font-size:100px;width:820px"><span style="color:var(--arancione)">Prima parte<br>del titolo,</span><br>seconda parte<br>del titolo</div>
+ <div class="abs" style="right:140px;top:935px;font-size:44px;color:var(--arancione)">Leggi la caption!</div>
+ <svg style="left:110px;top:1010px" width="420" height="220"><circle cx="150" cy="110" r="100" fill="#A98BEE"/><circle cx="150" cy="110" r="150" fill="none" stroke="#A98BEE" stroke-width="12" stroke-dasharray="120 520" stroke-dashoffset="-40"/></svg>
+</div>
+
+<!-- 3 Testo con titolo -->
+<div class="slide" id="testo">
+ <div class="hd"><div class="av"></div><div><b>Domenico Olivieri</b><span>Podcast coach, editor e sound designer</span></div></div>
+ <div class="abs" style="left:116px;top:250px;font-size:64px;font-weight:700;color:var(--arancione);letter-spacing:-.02em">Titolo della slide?</div>
+ <div class="abs" style="left:116px;top:420px;width:830px;font-size:46px;line-height:61px;color:var(--arancione)">Qui va il corpo del testo, allineato a sinistra. Frasi brevi e dirette, scritte come le diresti a voce.</div>
+ <svg width="1080" height="1350"><polygon points="1080,1065 1080,1350 795,1350" fill="#EE8F4D"/></svg>
+</div>
+
+<!-- 4 Solo testo -->
+<div class="slide" id="solotesto">
+ <div class="hd" style="left:32px;top:50px"><div class="av"></div><div><b>Domenico Olivieri</b><span>Podcast coach, editor e sound designer</span></div></div>
+ <div class="abs" style="left:40px;top:330px;width:900px;font-size:45px;line-height:63px;white-space:pre-line">Prima riga di testo
+
+Secondo blocco:
+altre righe di testo
+che vanno a capo.</div>
+ <svg width="1080" height="1350"><polygon points="1080,1170 1080,1350 810,1350" fill="#2E1976" transform="translate(0,0)"/></svg>
+</div>
+
+<!-- 5 Slide piena a colore -->
+<div class="slide" id="piena" style="background:var(--giallo)">
+ <div class="hd"><div class="av"></div><div><b>Domenico Olivieri</b><span>Podcast coach, editor e sound designer</span></div></div>
+ <div class="abs" style="left:118px;top:390px;width:820px;font-size:63px;line-height:102px;color:#fff;letter-spacing:-.02em">Una domanda o un'idea forte, scritta grande?<br><br>Scopriamolo insieme!</div>
+ <div class="abs" style="left:118px;top:1090px;width:760px;font-size:34px;line-height:46px;color:#fff">(una nota piccola tra parentesi)</div>
+ <svg width="1080" height="1350"><polygon points="940,675 1080,595 1080,755" fill="#fff"/></svg>
+</div>
+
+<!-- 6 Chiusura con foto a strisce -->
+<div class="slide" id="chiusura">
+ <div class="abs" style="left:366px;top:208px;width:310px;height:575px">
+  <!-- strisce: ogni barra mostra la stessa foto, spostata -->
+  <div style="position:absolute;inset:0;display:flex;gap:10px" id="strisce"></div>
+ </div>
+ <div class="abs" style="left:675px;top:700px;transform:rotate(-90deg);transform-origin:left top;font-size:38px;color:var(--arancione)">@domenicoolivieri_</div>
+ <div class="abs" style="left:0;right:0;top:810px;text-align:center;font-size:57px;line-height:98px;color:var(--arancione)">Hai una curiosità?<br><br>Chiedilo nei commenti!</div>
+</div>
+
+<!-- 7 Foto e testo -->
+<div class="slide" id="fototesto">
+ <div class="hd"><div class="av"></div><div><b>Domenico Olivieri</b><span>Podcast coach, editor e sound designer</span></div></div>
+ <div class="foto" style="left:90px;top:210px;width:900px;height:560px"></div>
+ <div class="abs" style="left:90px;top:810px;width:900px;font-size:60px;font-weight:700;color:var(--arancione);letter-spacing:-.02em">Titolo accanto alla foto</div>
+ <div class="abs" style="left:90px;top:910px;width:860px;font-size:40px;line-height:56px">Una o due frasi per raccontare la foto e il contesto.</div>
+ <svg width="1080" height="1350"><polygon points="1080,1150 1080,1350 880,1350" fill="#EE8F4D"/></svg>
+</div>
+
+<!-- 8 Elenco numerato -->
+<div class="slide" id="elenco">
+ <div class="hd"><div class="av"></div><div><b>Domenico Olivieri</b><span>Podcast coach, editor e sound designer</span></div></div>
+ <div class="abs" style="left:100px;top:250px;font-size:64px;font-weight:700;color:var(--arancione);letter-spacing:-.02em">Titolo dell'elenco</div>
+ <div id="el"></div>
+ <svg width="1080" height="1350"><polygon points="1080,1065 1080,1350 795,1350" fill="#2E1976"/></svg>
+</div>
+
+<script>
+// strisce segnaposto (stesso gradiente della foto, tagliato in barre di altezze diverse)
+const alt=[[60,470],[35,520],[0,575],[30,500],[10,540],[0,560],[25,500],[55,430],[70,380]];
+const s=document.getElementById('strisce');
+alt.forEach(([t,h],i)=>{const d=document.createElement('div');d.style.cssText=`width:${i==2||i==5?44:26}px;margin-top:${t}px;height:${h}px;background:linear-gradient(135deg,#d9d3ff,#a98bee 60%,#f4b162) ${-i*36}px 0/310px 575px`;s.appendChild(d)});
+const el=document.getElementById('el');
+['Primo punto dell\'elenco','Secondo punto','Terzo punto'].forEach((t,i)=>{el.insertAdjacentHTML('beforeend',`<div class="abs" style="left:100px;top:${430+i*230}px;display:flex;gap:36px;align-items:center"><div style="width:110px;height:110px;border-radius:50%;background:var(--arancione);color:#fff;display:grid;place-items:center;font:70px var(--font-titoli);flex:none">${i+1}</div><div style="font-size:44px;line-height:60px;width:700px">${t}</div></div>`)});
+</script></body></html>
