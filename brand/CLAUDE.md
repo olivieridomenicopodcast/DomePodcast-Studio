@@ -29,7 +29,3 @@ Questa cartella (`brand/` nel repo DomePodcast-Studio) contiene i loghi di **Oli
 - Niky ha detto di fare **sempre in autonomia** commit, push e merge in `main`, senza chiedere conferma ogni volta.
 - Dopo ogni modifica: commit con messaggio chiaro, push sul branch di lavoro e merge in `main` (che è il ramo da cui parte la PWA con GitHub Pages).
 - Non aprire pull request se non richiesto: porta le modifiche in `main` con un merge/push diretto.
-
-## Sincronizzazione
-
-Questa cartella è una copia dei loghi di `olivieridomenicopodcast/Crea-loghi` (dove stanno gli originali e la PWA). Per allinearle usa lo script `tools/sincronizza_brand.py` di quel repo: `--git` per copiare da Crea-loghi a qui, `--inverso` per il contrario. Se modifichi i loghi qui, riportali anche in Crea-loghi.
