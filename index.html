@@ -49,6 +49,13 @@
       <button id="pf-anteprima" class="btn sec" type="button">Anteprima del portfolio</button>
     </div>
     <details class="blocco" id="pf-gen"><summary>Pagina del portfolio (titoli, foto, contatti)</summary><div id="pf-gen-campi"></div></details>
+    <details class="blocco" id="pf-clienti"><summary>Clienti in evidenza e collaborazioni</summary>
+      <p class="nota">Elenco dei nomi, dal più importante. I primi compaiono in alto nella pagina, senza cover, anche per i podcast interni o non pubblicati. Gli altri vanno in «Altre collaborazioni» in fondo.</p>
+      <label class="campo"><span>Quanti nomi mostrare in alto</span><input type="number" id="pf-cl-max" min="0" max="30" inputmode="numeric"></label>
+      <label class="spunta"><input type="checkbox" id="pf-cl-altri"> Mostra anche «altre collaborazioni» in fondo</label>
+      <div id="pf-cl-lista"></div>
+      <div class="riga-btn"><button id="pf-cl-nuovo" class="btn piccolo" type="button">+ Aggiungi un cliente</button><button id="pf-cl-import" class="btn sec piccolo" type="button">Aggiungi i clienti dei podcast</button></div>
+    </details>
     <div id="pf-lista"></div>
     <div class="blocco"><h2>Pubblica</h2>
       <p class="nota">Esporta il sito pronto (zip), poi incolla il messaggio e allega lo zip in Claude Code: ci penso io a metterlo online.</p>

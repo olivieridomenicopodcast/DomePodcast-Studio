@@ -19,9 +19,14 @@ export const PF_VUOTO = {
     ctaLink: '',
     instagram: 'https://www.instagram.com/domenicoolivieri_/',
     linkedin: '', youtube: '', sito: 'https://olivieridomenico.it',
+    clientiMax: 6,
+    clientiTitolo: 'Hanno collaborato con me',
+    altriTitolo: 'Altre collaborazioni',
+    mostraAltri: true,
     nota: '',
     baseUrl: 'https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/',
   },
+  clienti: [], // nomi dei clienti, in ordine di importanza: { id, nome, nota, podcastId }
   podcast: [],
 };
 
@@ -106,6 +111,25 @@ function sezione(titolo, testo, schede, chips) {
 <div class="griglia">${schede.join('')}</div></div></section>`;
 }
 
+
+// Nomi dei clienti: i primi «clientiMax» in evidenza sotto l'intestazione, gli altri in «Altre collaborazioni».
+// Se il cliente è collegato a un podcast pubblicato, il nome porta alla sua pagina; altrimenti è solo un nome (podcast interno).
+function nomiClienti(pf, g, lista) {
+  const tutti = (pf.clienti || []).filter((c) => String(c.nome || '').trim());
+  const max = Math.max(0, parseInt(g.clientiMax, 10) || 0);
+  const voce = (c) => {
+    const p = c.podcastId && lista.find((x) => x.id === c.podcastId);
+    const nota = String(c.nota || '').trim() || (p ? 'Podcast online' : 'Collaborazione');
+    const dentro = `<span class="cl-n">${esc(c.nome)}</span><span class="cl-c">${esc(nota)}</span>`;
+    return p ? `<li><a href="${esc(p.slug)}/" data-pf="${esc(p.slug)}">${dentro}</a></li>` : `<li>${dentro}</li>`;
+  };
+  const ev = tutti.slice(0, max), altri = tutti.slice(max);
+  return {
+    alto: ev.length ? `<section class="clienti"><div class="wrap"><h2 class="mini">${esc(g.clientiTitolo)}</h2><ul class="cl-lista">${ev.map(voce).join('')}</ul></div></section>` : '',
+    basso: g.mostraAltri && altri.length ? `<section class="sez altri-cl"><div class="wrap"><h2 class="t">${esc(g.altriTitolo)}</h2><p class="elenco-cl">${altri.map((c) => esc(c.nome)).join(' · ')}</p></div></section>` : '',
+  };
+}
+
 const FILTRO = `<script>(function(){var c=document.querySelectorAll('.chip[data-f]');c.forEach(function(b){b.addEventListener('click',function(){c.forEach(function(x){x.classList.toggle('on',x===b)});var f=b.dataset.f;document.querySelectorAll('.card[data-r]').forEach(function(k){k.hidden=!!f&&(k.dataset.r||'').split('|').indexOf(f)<0})})})})();</script>`;
 
 // pf = dati del portfolio. Ritorna { 'index.html': testo, '<slug>/index.html': testo, ... }
@@ -117,6 +141,7 @@ export function generaSito(pf, opzioni = {}) {
   const lista = conSlug(pf);
   const clienti = lista.filter((p) => p.tipo !== 'mio'), miei = lista.filter((p) => p.tipo === 'mio');
   const file = {};
+  const cl = nomiClienti(pf, g, lista);
 
   // ----- elenco
   const ruoliTutti = [...new Set(clienti.flatMap(ruoliDi))];
@@ -128,9 +153,11 @@ export function generaSito(pf, opzioni = {}) {
 <header class="hero"><div class="wrap"><nav class="nav"><a href="#contatti">Lavora con me</a><a href="#contatti">Contatti</a></nav>
 <div class="hero-in"><div class="hero-testo"><p class="autore">${esc(g.nome)}</p><h1 class="t">${esc(g.titolo)}</h1><p class="motto">${esc(g.motto)}</p><a class="cta" href="#progetti">Guarda i progetti ↓</a></div>${foto}</div>
 ${lista.length ? `<p class="num">${esc(stat)}</p>` : ''}</div></header>
+${cl.alto}
 <main id="progetti">${lista.length ? '' : '<section class="sez"><div class="wrap"><p class="lead">Il portfolio è in arrivo.</p></div></section>'}
 ${sezione(g.introTitolo, g.introTesto, clienti.map((p) => scheda(p, imgUrl)), chips)}
 ${sezione(g.mieiTitolo, g.mieiTesto, miei.map((p) => scheda(p, imgUrl)), '')}</main>
+${cl.basso}
 ${chiusura(g)}${piede(g)}${FILTRO}</body></html>`;
 
   // ----- una pagina per podcast

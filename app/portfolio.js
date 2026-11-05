@@ -13,6 +13,7 @@ const GEN = [
   ['ctaTitolo', 'Chiusura: titolo', 'testo'], ['ctaTesto', 'Chiusura: testo', 'testo'], ['ctaBottone', 'Chiusura: testo del pulsante', 'testo'],
   ['ctaLink', 'Chiusura: link del pulsante (es. mailto:tuamail@esempio.it)', 'testo'],
   ['instagram', 'Link Instagram', 'testo'], ['linkedin', 'Link LinkedIn', 'testo'], ['youtube', 'Link YouTube', 'testo'], ['sito', 'Link al tuo sito', 'testo'],
+  ['clientiTitolo', 'Titolo dei nomi in evidenza (in alto)', 'testo'], ['altriTitolo', 'Titolo delle altre collaborazioni (in fondo)', 'testo'],
   ['nota', 'Nota in fondo alla pagina (facoltativa)', 'area'],
   ['baseUrl', 'Indirizzo pubblico del portfolio (avanzato)', 'testo'],
 ];
@@ -41,7 +42,7 @@ let storiaId = null;
 function leggi() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY));
-    if (s && Array.isArray(s.podcast)) return { ...PF_VUOTO, ...s, generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } };
+    if (s && Array.isArray(s.podcast)) return { ...PF_VUOTO, clienti: [], ...s, generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } };
   } catch { /* si riparte */ }
   return JSON.parse(JSON.stringify(PF_VUOTO));
 }
@@ -101,6 +102,7 @@ function renderLista() {
   $('#pf-riepilogo').textContent = pf.podcast.length
     ? `${pf.podcast.length} podcast nell'editor, ${n} pubblicati nel portfolio.` : 'Ancora nessun podcast: tocca «+ Nuovo podcast».';
   $('#pf-lista').innerHTML = pf.podcast.map(htmlPodcast).join('');
+  renderClienti();
   $('#pf-gen-campi').innerHTML = GEN.map(([k, lab, tipo]) => htmlCampo(pf.generale, [k, lab, tipo])).join('')
     + `<div class="riga-btn"><label class="spunta"><input type="checkbox" data-gc="foto" ${pf.generale.foto ? 'checked' : ''}> Mostra la mia foto in alto</label>
     <label class="btn sec piccolo file">${urls.get('pf-hero') ? 'Cambia foto' : 'Carica la foto'}<input type="file" accept="image/*" data-hero hidden></label></div>`;
@@ -169,6 +171,43 @@ $('#pf-gen-campi').addEventListener('change', async (ev) => {
       pf.generale.foto = true; renderLista(); salva(); toast('Foto salvata');
     } catch { toast('Non riesco a leggere questa foto'); }
   }
+});
+
+
+/* ---------- clienti in evidenza ---------- */
+
+function renderClienti() {
+  const max = Math.max(0, parseInt(pf.generale.clientiMax, 10) || 0);
+  $('#pf-cl-max').value = max;
+  $('#pf-cl-altri').checked = pf.generale.mostraAltri !== false;
+  $('#pf-cl-lista').innerHTML = pf.clienti.map((c, i) => `<div class="clrow" data-id="${c.id}">
+    <span class="chip ${i < max ? 'on' : ''}">${i < max ? 'In alto' : 'In fondo'}</span>
+    <input type="text" data-c="nome" value="${esc(c.nome)}" placeholder="Nome (es. Allianz Assicurazioni)">
+    <input type="text" data-c="nota" value="${esc(c.nota || '')}" placeholder="Etichetta (es. Podcast interno)">
+    <select data-c="podcastId"><option value="">Nessun podcast pubblico (interno)</option>${pf.podcast.map((p) => `<option value="${p.id}" ${c.podcastId === p.id ? 'selected' : ''}>Podcast: ${esc(p.titolo || 'senza titolo')}</option>`).join('')}</select>
+    <div class="riga-btn"><button type="button" class="ico" data-ca="su" ${i === 0 ? 'disabled' : ''} aria-label="Sposta su">↑</button><button type="button" class="ico" data-ca="giu" ${i === pf.clienti.length - 1 ? 'disabled' : ''} aria-label="Sposta giù">↓</button><button type="button" class="btn sec piccolo" data-ca="del">Elimina</button></div></div>`).join('')
+    || '<p class="nota">Nessun cliente: tocca «+ Aggiungi un cliente».</p>';
+}
+$('#pf-cl-nuovo').onclick = () => { pf.clienti.push({ id: uid(), nome: '', nota: '', podcastId: '' }); renderClienti(); salva(); $('#pf-cl-lista .clrow:last-child [data-c=nome]')?.focus(); };
+$('#pf-cl-import').onclick = () => {
+  const noti = new Set(pf.clienti.map((c) => (c.nome || '').trim().toLowerCase()));
+  let n = 0;
+  pubblicati(pf).forEach((p) => {
+    const nome = (p.cliente || '').trim();
+    if (nome && !noti.has(nome.toLowerCase()) && !pf.clienti.some((c) => c.podcastId === p.id)) { pf.clienti.push({ id: uid(), nome, nota: '', podcastId: p.id }); noti.add(nome.toLowerCase()); n++; }
+  });
+  renderClienti(); salva(); toast(n ? `Aggiunti ${n} clienti dai podcast` : 'Nessun cliente nuovo da aggiungere');
+};
+$('#pf-cl-max').oninput = (e) => { pf.generale.clientiMax = clamp(parseInt(e.target.value, 10) || 0, 0, 30); salva(); document.querySelectorAll('#pf-cl-lista .clrow').forEach((r, i) => { const ch = $('.chip', r); const ev = i < pf.generale.clientiMax; ch.classList.toggle('on', ev); ch.textContent = ev ? 'In alto' : 'In fondo'; }); };
+$('#pf-cl-altri').onchange = (e) => { pf.generale.mostraAltri = e.target.checked; salva(); };
+$('#pf-cl-lista').addEventListener('input', (ev) => { const t = ev.target, r = t.closest('.clrow'); if (!r || !t.dataset.c) return; pf.clienti.find((c) => c.id === r.dataset.id)[t.dataset.c] = t.value; salva(); });
+$('#pf-cl-lista').addEventListener('change', (ev) => { const t = ev.target, r = t.closest('.clrow'); if (r && t.dataset.c === 'podcastId') { const c = pf.clienti.find((x) => x.id === r.dataset.id); c.podcastId = t.value; if (t.value && !c.nome.trim()) { c.nome = podById(t.value)?.cliente || ''; renderClienti(); } salva(); } });
+$('#pf-cl-lista').addEventListener('click', (ev) => {
+  const b = ev.target.closest('[data-ca]'); if (!b) return;
+  const r = b.closest('.clrow'), i = pf.clienti.findIndex((c) => c.id === r.dataset.id), a = b.dataset.ca;
+  if (a === 'del') pf.clienti.splice(i, 1);
+  else { const j = a === 'su' ? i - 1 : i + 1; if (j < 0 || j >= pf.clienti.length) return; [pf.clienti[i], pf.clienti[j]] = [pf.clienti[j], pf.clienti[i]]; }
+  renderClienti(); salva();
 });
 
 /* ---------- anteprima delle pagine ---------- */
@@ -275,6 +314,7 @@ $('#pf-copia').onclick = async () => {
     '2. Controlla con Playwright (viewport da telefono) che l\'elenco e le pagine dei podcast si aprano, senza errori in console e con le immagini.',
     '3. Se non ci sono errori: sh scripts/aggiorna-build.sh, commit, push e merge in main (fast-forward).',
     '4. Dimmi l\'indirizzo: https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/', '',
+    `Nomi in evidenza in alto (${Math.max(0, parseInt(pf.generale.clientiMax, 10) || 0)}): ${pf.clienti.slice(0, Math.max(0, parseInt(pf.generale.clientiMax, 10) || 0)).map((c) => c.nome).filter(Boolean).join(', ') || '(nessuno)'}`, '',
     `Podcast pubblicati (${l.length}):`, ...l.map((p) => `- ${p.titolo} → portfolio/${p.slug}/${p.cover ? '' : ' (senza cover)'}`), '',
     'Nota: le cover sono immagini di clienti e il repo è pubblico. Prima di committare portfolio/img/ chiedi a Niky conferma esplicita di avere l\'ok a pubblicarle (questo messaggio non è una conferma).'].join('\n');
   try { await navigator.clipboard.writeText(testo); toast('Messaggio copiato: incollalo in Claude Code'); } catch { toast('Non riesco a copiare: riprova'); }

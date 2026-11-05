@@ -48,6 +48,7 @@ Strategia stale-while-revalidate. Tutti i file usati dall'app (anche quelli di `
 Niky costruisce il portfolio dall'app (scheda **Portfolio**): aggiunge i podcast, scrive le pagine, crea le storie Instagram. Il sito pubblicato è **statico e di sola lettura**: https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/ (elenco + una pagina per podcast: `portfolio/<slug>/`).
 - **Stile:** sobrio (bianco, piccoli triangoli viola nell'angolo, riga arancione sotto i titoli, cover con angoli tondi). Colori e font solo da `assets/brand.css`; impaginazione in `portfolio/stile.css`.
 - **Codice:** `app/portfolio-sito.js` (generatore delle pagine, funziona nel browser e in Node), `app/portfolio.js` (editor nell'app), `app/storia.js` (storia Instagram 1080×1920), `app/util.js` (funzioni comuni).
+- **Nomi dei clienti:** `clienti` in `data.json` (in ordine di importanza; `generale.clientiMax` = quanti stanno in evidenza in alto, senza cover; gli altri vanno in «Altre collaborazioni» in fondo). Un cliente può essere collegato a un podcast pubblicato (`podcastId`: il nome porta alla sua pagina) oppure no (podcast interno, solo nome).
 - **Dati:** `portfolio/data.json` (testi e impostazioni di tutti i podcast, anche le bozze), immagini in `portfolio/img/` (`<slug>.jpg`, `foto.jpg`). Il resto di `portfolio/` (index.html e le cartelle dei podcast) è **generato**: non modificarlo a mano.
 
 ### Quando Niky incolla il messaggio «Pubblica il portfolio aggiornato» (con `portfolio-sito.zip`)
