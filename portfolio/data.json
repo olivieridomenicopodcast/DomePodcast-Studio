@@ -179,6 +179,54 @@
     "data": true,
     "invito": "Ascolta ora"
    }
+  },
+  {
+   "id": "2ax6fpj",
+   "titolo": "E molto altro ancora",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Podcast che celebra i 45 anni di Alias, marchio storico del design Made in Italy.",
+   "cliente": "Alias",
+   "periodo": "09/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "Federica Capozzi",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/13xAioS8ndd6vZaCVYP8eM?si=d8e88f1b6ea14bab",
+   "slug": "e-molto-altro-ancora",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
+  },
+  {
+   "id": "42b35ei",
+   "titolo": "Inclusi",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Inclusi è un podcast che racconta storie di ogni giorno, storie di tutti, storie di impegno per un mondo sempre più simile a ognuno di noi.",
+   "cliente": "Consorzio Nazionale CGM",
+   "periodo": "09/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "Rossella Pivanti",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/22OJKdn49AfdrPENGCLP9K?si=wDsnVw-iTHyKyoLp2VlHdw&utm_source=copy-link",
+   "slug": "inclusi",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
   }
  ]
 }
