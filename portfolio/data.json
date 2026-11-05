@@ -107,6 +107,30 @@
     "data": true,
     "invito": "Ascolta ora"
    }
+  },
+  {
+   "id": "h77xmw3",
+   "titolo": "Lavoraci Su",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Il podcast di Annalisa Carrera alla scoperta del motivo per cui si fa il lavoro che si sta facendo.",
+   "cliente": "Annalisa Carrera",
+   "periodo": "01/24",
+   "ruoli": "Montaggio, Sonorizzazione",
+   "producer": "",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/2QC81C9BalmOR78Zrph0Gq?si=70551c93fc494942",
+   "slug": "lavoraci-su",
+   "cover": false,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
   }
  ]
 }
