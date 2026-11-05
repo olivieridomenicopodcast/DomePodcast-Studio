@@ -26,6 +26,7 @@ export const PF_VUOTO = {
     nota: '',
     baseUrl: 'https://olivieridomenicopodcast.github.io/DomePodcast-Studio/portfolio/',
   },
+  tagRuoli: ['Montaggio', 'Sonorizzazione', 'Sound design', 'Registrazione', 'Distribuzione', 'Composizione musicale', 'Coaching', 'Consulenza'], // tag del «mio ruolo»
   clienti: [], // nomi dei clienti, in ordine di importanza: { id, nome, nota, podcastId }
   podcast: [],
 };

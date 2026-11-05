@@ -73,3 +73,6 @@ canvas.storia{width:min(300px,70vw);height:auto;border:1px solid var(--ui-bordo)
 .clrow{background:var(--ui-sfondo);border-radius:12px;padding:10px;margin:8px 0;display:grid;gap:8px}
 .clrow .chip{justify-self:start;padding:3px 10px;font-size:12px}
 input[type=number]{width:100%;padding:10px;border:1px solid var(--ui-bordo);border-radius:10px;font:16px var(--font-ui);color:var(--viola)}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0}
+.chip .x{border:0;background:none;color:inherit;font-size:13px;padding:0 0 0 4px;opacity:.7}

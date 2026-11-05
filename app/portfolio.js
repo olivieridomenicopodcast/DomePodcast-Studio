@@ -25,7 +25,7 @@ const CAMPI = [
   ['breve', 'Descrizione breve (elenco e storia)', 'area'],
   ['cliente', 'Cliente / autore', 'testo'],
   ['periodo', 'Periodo (es. 09/23)', 'testo'],
-  ['ruoli', 'Il mio ruolo (separato da virgole)', 'testo', 'Montaggio, Sonorizzazione'],
+  ['ruoli', 'Il mio ruolo (tocca i tag)', 'tag'],
   ['producer', 'Producer (facoltativo)', 'testo'],
   ['racconto', 'Di cosa parla (riga vuota = nuovo paragrafo, **grassetto**)', 'area6'],
   ['fatto', 'Cosa ho fatto (una voce per riga)', 'area'],
@@ -43,7 +43,7 @@ let storiaId = null;
 function leggi() {
   try {
     const s = JSON.parse(localStorage.getItem(KEY));
-    if (s && Array.isArray(s.podcast)) return { ...PF_VUOTO, clienti: [], ...s, generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } };
+    if (s && Array.isArray(s.podcast)) return { ...PF_VUOTO, clienti: [], ...s, tagRuoli: [...(s.tagRuoli || PF_VUOTO.tagRuoli)], generale: { ...PF_VUOTO.generale, ...(s.generale || {}) } };
   } catch { /* si riparte */ }
   return JSON.parse(JSON.stringify(PF_VUOTO));
 }
@@ -70,7 +70,22 @@ function scartaUrl(k) { const u = urls.get(k); if (u) { URL.revokeObjectURL(u); 
 
 /* ---------- editor ---------- */
 
+const mn = (t) => String(t).trim().toLowerCase();
+function tuttiITag(p) {
+  const visti = new Set(), out = [];
+  [...pf.tagRuoli, ...ruoliDi(p)].forEach((t) => { if (t && !visti.has(mn(t))) { visti.add(mn(t)); out.push(t); } });
+  return out;
+}
+function htmlTag(p, lab) {
+  const sel = new Set(ruoliDi(p).map(mn));
+  return `<div class="campo" data-tags><span>${lab}</span>
+    <div class="tags">${tuttiITag(p).map((t) => `<button type="button" class="chip ${sel.has(mn(t)) ? 'on' : ''}" data-tag="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    <div class="riga-btn"><input type="text" data-newtag placeholder="Nuovo tag (es. Mixaggio)" style="flex:1;min-width:150px"><button type="button" class="btn sec piccolo" data-a="tag-add">+ Aggiungi</button></div>
+    <details><summary>Gestisci l'elenco dei tag</summary><div class="tags">${tuttiITag(p).map((t) => `<span class="chip">${esc(t)} <button type="button" class="x" data-a="tag-del" data-t="${esc(t)}" aria-label="Elimina il tag ${esc(t)}">✕</button></span>`).join('')}</div></details></div>`;
+}
+
 function htmlCampo(p, [k, lab, tipo, ph, extra]) {
+  if (tipo === 'tag') return htmlTag(p, lab);
   const v = p[k] ?? '';
   if (tipo === 'select') return `<label class="campo"><span>${lab}</span><select data-f="${k}">${ph.map(([val, n]) => `<option value="${val}" ${v === val || (!v && val === ph[0][0]) ? 'selected' : ''}>${n}</option>`).join('')}</select></label>`;
   if (tipo === 'testo') return `<label class="campo"><span>${lab}</span><input type="text" data-f="${k}" value="${esc(v)}" placeholder="${esc(ph || '')}"></label>`;
@@ -118,6 +133,7 @@ $('#pf-nuovo').onclick = () => {
 const lista = $('#pf-lista');
 lista.addEventListener('toggle', (ev) => { const d = ev.target.closest('.pcard'); if (d && ev.target === d) { if (d.open) aperti.add(d.dataset.id); else aperti.delete(d.dataset.id); } }, true);
 
+lista.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && ev.target.dataset.newtag !== undefined) { ev.preventDefault(); $('[data-a=tag-add]', ev.target.closest('.pcard')).click(); } });
 lista.addEventListener('input', (ev) => {
   const t = ev.target, card = t.closest('.pcard'); if (!card || !t.dataset.f) return;
   const p = podById(card.dataset.id); p[t.dataset.f] = t.value;
@@ -142,7 +158,18 @@ lista.addEventListener('change', async (ev) => {
   }
 });
 
+// salva i tag scelti nell'ordine dell'elenco generale
+function salvaTag(p, scelti) {
+  const ordine = tuttiITag(p), set = new Set(scelti.map(mn));
+  p.ruoli = ordine.filter((t) => set.has(mn(t))).join(', ');
+}
 lista.addEventListener('click', async (ev) => {
+  const tg = ev.target.closest('[data-tag]');
+  if (tg) {
+    const card = tg.closest('.pcard'), p = podById(card.dataset.id), t = tg.dataset.tag, ora = ruoliDi(p);
+    const scelti = ora.some((x) => mn(x) === mn(t)) ? ora.filter((x) => mn(x) !== mn(t)) : [...ora, t];
+    salvaTag(p, scelti); tg.classList.toggle('on'); salva(); return;
+  }
   const b = ev.target.closest('[data-a]'); if (!b) return;
   const card = b.closest('.pcard'), p = podById(card.dataset.id), i = pf.podcast.indexOf(p), a = b.dataset.a;
   if (a === 'su' || a === 'giu') {
@@ -156,6 +183,18 @@ lista.addEventListener('click', async (ev) => {
     if (!confirm(`Eliminare «${p.titolo || 'questo podcast'}» dall'editor?`)) return;
     fotoElimina(chiave(p)); scartaUrl(chiave(p)); pf.podcast.splice(i, 1); renderLista(); salva();
   } else if (a === 'cover-del') { fotoElimina(chiave(p)); scartaUrl(chiave(p)); p.cover = false; renderLista(); salva(); }
+  else if (a === 'tag-add') {
+    const inp = $('[data-newtag]', card), nome = inp.value.trim().replace(/\s+/g, ' ');
+    if (!nome) { toast('Scrivi il nome del tag'); return; }
+    if (!tuttiITag(p).some((t) => mn(t) === mn(nome))) pf.tagRuoli.push(nome);
+    salvaTag(p, [...ruoliDi(p), nome]); renderLista(); salva(); toast(`Tag «${nome}» aggiunto`);
+  } else if (a === 'tag-del') {
+    const t = b.dataset.t, usati = pf.podcast.filter((x) => ruoliDi(x).some((r) => mn(r) === mn(t))).length;
+    if (!confirm(`Eliminare il tag «${t}» dall'elenco${usati ? ` e da ${usati} podcast` : ''}?`)) return;
+    pf.tagRuoli = pf.tagRuoli.filter((x) => mn(x) !== mn(t));
+    pf.podcast.forEach((x) => { x.ruoli = ruoliDi(x).filter((r) => mn(r) !== mn(t)).join(', '); });
+    renderLista(); salva();
+  }
   else if (a === 'prev') anteprima(p.id);
   else if (a === 'storia') apriStoria(p.id);
 });
@@ -382,7 +421,7 @@ $('#gh-pull').onclick = async () => {
       if (h) { await fotoSalva('pf-hero', h); scartaUrl('pf-hero'); } else remoto.generale.foto = false;
     }
     const bozze = pf.podcast.filter((p) => p.stato === 'bozza' && !remoto.podcast.some((r) => r.id === p.id));
-    pf = { ...PF_VUOTO, clienti: [], ...remoto, generale: { ...PF_VUOTO.generale, ...(remoto.generale || {}) }, podcast: [...remoto.podcast, ...bozze] };
+    pf = { ...PF_VUOTO, clienti: [], ...remoto, tagRuoli: [...(remoto.tagRuoli || pf.tagRuoli || PF_VUOTO.tagRuoli)], generale: { ...PF_VUOTO.generale, ...(remoto.generale || {}) }, podcast: [...remoto.podcast, ...bozze] };
     salva(); await precarica(); renderLista();
     ghStato(`Fatto: ${remoto.podcast.length} podcast presi dal sito.`); toast('Pull riuscito');
   } catch (e) { ghStato(e instanceof SyntaxError ? 'Il file sul sito è rovinato.' : spiegaErrore(e), true); }
