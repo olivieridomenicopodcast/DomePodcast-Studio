@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DomePodcast Studio</title>
+<meta name="description" content="Crea caroselli e post Instagram con la brand identity di Olivieri Domenico.">
+<meta name="theme-color" content="#2E1976">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dome Studio">
+<link rel="stylesheet" href="assets/brand.css">
+<link rel="stylesheet" href="app/app.css">
+</head>
+<body>
+<header class="top">
+  <img src="brand/logo/ufficiale/logo-ufficiale.svg" alt="" width="44" height="44">
+  <div><h1>DomePodcast Studio</h1><p>Caroselli e post con il tuo stile</p></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button data-tab="crea" class="on" role="tab">Crea</button>
+  <button data-tab="brief" role="tab">Brief per Claude</button>
+  <button data-tab="impostazioni" role="tab">Impostazioni</button>
+</nav>
+<div id="aggiorna" class="banner" hidden></div>
+
+<main>
+  <section id="tab-crea" class="tab on">
+    <div class="riga"><span class="etichetta">Cosa vuoi creare?</span><div id="formati" class="chips"></div></div>
+    <div id="slides"></div>
+    <div class="azioni">
+      <div class="aggiungi"><select id="nuovo-layout" aria-label="Tipo di nuova slide"></select><button id="aggiungi" class="btn sec" type="button">+ Aggiungi slide</button></div>
+      <button id="scarica" class="btn" type="button">Scarica</button>
+      <button id="condividi" class="btn sec" type="button">Condividi</button>
+      <button id="zip" class="btn sec" type="button">Scarica zip</button>
+      <p class="nota">«Scarica» salva le immagini nei Download del telefono. «Condividi» apre il menu del telefono (WhatsApp, Instagram…).</p>
+    </div>
+  </section>
+
+  <section id="tab-brief" class="tab">
+    <p class="nota">Dallo stesso modulo: copia il messaggio e incollalo in Claude Code. Le foto vanno condivise numerate (immagine-1, immagine-2…).</p>
+    <div class="azioni">
+      <button id="copia-brief" class="btn" type="button">Copia il brief</button>
+      <button id="condividi-foto" class="btn sec" type="button">Condividi le foto numerate</button>
+    </div>
+    <details class="blocco" open><summary>Aggiungi come nuovo template o elemento</summary>
+      <label class="campo"><span>Cosa vuoi aggiungere?</span>
+        <select id="nt-tipo"><option value="">Niente</option><option value="template">Un nuovo template (layout di slide)</option><option value="elemento">Un nuovo elemento grafico</option></select></label>
+      <label class="campo"><span>Nome</span><input id="nt-nome" type="text" placeholder="Es. Slide con citazione"></label>
+      <label class="campo"><span>Descrizione</span><textarea id="nt-desc" rows="3" placeholder="Com'è fatto, dove vanno i testi, che colori…"></textarea></label>
+    </details>
+    <textarea id="brief" class="brief" rows="22" readonly></textarea>
+  </section>
+
+  <section id="tab-impostazioni" class="tab">
+    <div class="blocco"><h2>Profilo (intestazione dei post)</h2>
+      <label class="campo"><span>Handle</span><input id="p-handle" type="text" autocapitalize="none"></label>
+      <label class="campo"><span>Nome</span><input id="p-nome" type="text"></label>
+      <label class="campo"><span>Descrizione</span><input id="p-descr" type="text"></label>
+      <div class="riga-btn"><img id="p-foto" class="avatar" alt="" width="64" height="64">
+        <label class="btn sec file">Foto profilo<input id="p-file" type="file" accept="image/*" hidden></label>
+        <button id="p-rimuovi" class="btn sec" type="button">Usa il logo</button></div>
+      <p class="nota">La foto resta solo su questo telefono. Se non la carichi, nell'intestazione compare il logo ufficiale.</p>
+    </div>
+    <div class="blocco"><h2>Installa sul telefono</h2>
+      <button id="installa" class="btn" type="button" hidden>Installa l'app</button>
+      <p id="istruzioni-installa" class="nota"></p>
+    </div>
+    <div class="blocco"><h2>Aggiornamenti</h2>
+      <button id="controlla" class="btn sec" type="button">Controlla aggiornamenti</button>
+      <p id="stato-agg" class="nota"></p>
+    </div>
+    <div class="blocco"><h2>Template ed elementi</h2><div id="elenco-cat"></div></div>
+    <div class="blocco"><h2>Dati</h2>
+      <button id="cancella" class="btn pericolo" type="button">Cancella tutti i dati</button>
+      <p class="nota">Elimina testi, foto e impostazioni salvati su questo telefono.</p>
+    </div>
+  </section>
+</main>
+
+<div id="picker" class="picker" hidden><div class="picker-in"><div class="picker-top"><b>Scegli un elemento</b><button id="picker-chiudi" class="btn sec" type="button">Chiudi</button></div><div id="picker-lista"></div></div></div>
+<div id="toast" class="toast" hidden></div>
+<div id="build" class="build">build …</div>
+<script type="module" src="app/app.js"></script>
+</body>
+</html>
