@@ -227,6 +227,30 @@
     "data": true,
     "invito": "Ascolta ora"
    }
+  },
+  {
+   "id": "wbsi3l7",
+   "titolo": "The Science of Creating Health & Vitality ",
+   "tipo": "cliente",
+   "stato": "pubblicato",
+   "breve": "Podcast scentifico dedicato alla nutrizione funzionale & lifestyle medicine.\n\nMi sono occupato di montaggio e distribuzione.",
+   "cliente": "",
+   "periodo": "08/23",
+   "ruoli": "Montaggio, Distribuzione",
+   "producer": "",
+   "racconto": "",
+   "fatto": "",
+   "citazione": "",
+   "citAutore": "",
+   "link": "https://open.spotify.com/show/4q6VbbKEn0kHuWXamw8fFs?si=984502b0ae644bef",
+   "slug": "the-science-of-creating-health-vitality",
+   "cover": true,
+   "storia": {
+    "sfondo": "bianco",
+    "ruolo": true,
+    "data": true,
+    "invito": "Ascolta ora"
+   }
   }
  ]
 }
